@@ -1,11 +1,11 @@
-import { Typography, Button } from "@mui/material";
+import { AuthProvider } from "./contexts/AuthContext";
+import AppRouter from "./router";
 
 function App() {
   return (
-    <div>
-     <Typography variant="h1" color="secondary">Tasko</Typography>
-     <Button variant="contained">Primary Button</Button>
-    </div>
+    <AuthProvider>
+      <AppRouter/>
+    </AuthProvider>
   )
 }
 
