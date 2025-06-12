@@ -1,4 +1,4 @@
-import { createTheme } from '@mui/material/styles';
+import { createTheme, responsiveFontSizes } from '@mui/material/styles';
 
 const baseTheme = createTheme({
   spacing: 8,
@@ -20,7 +20,7 @@ const baseTheme = createTheme({
   },
 });
 
-const theme = createTheme(baseTheme, {
+let theme = createTheme(baseTheme, {
   components: {
     MuiButton: {
       styleOverrides: {
@@ -80,5 +80,7 @@ const theme = createTheme(baseTheme, {
     },
   },
 });
+
+theme = responsiveFontSizes(theme);
 
 export default theme;

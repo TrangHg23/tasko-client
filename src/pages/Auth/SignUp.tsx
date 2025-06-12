@@ -1,7 +1,11 @@
+import AuthForm from "@components/auth/AuthForm"
+import AuthLayout from "@layouts/AuthLayout"
 
 function SignUp() {
   return (
-    <div>SignUp</div>
+    <AuthLayout>
+      <AuthForm mode="signup"/>
+    </AuthLayout>
   )
 }
 
