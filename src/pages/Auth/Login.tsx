@@ -1,7 +1,11 @@
+import AuthForm from "@components/auth/AuthForm";
+import AuthLayout from "@layouts/AuthLayout";
 
 function Login() {
   return (
-    <div>Login</div>
+    <AuthLayout>
+      <AuthForm mode="login" />
+    </AuthLayout>
   )
 }
 
