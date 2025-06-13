@@ -4,7 +4,7 @@ import AuthLayout from "@layouts/AuthLayout";
 function Login() {
   return (
     <AuthLayout>
-      <AuthForm mode="login" />
+      <AuthForm/>
     </AuthLayout>
   )
 }
