@@ -4,14 +4,17 @@ import { Link } from 'react-router-dom';
 import { Controller, useForm} from 'react-hook-form';
 import { useState } from 'react';
 import type { RegisterRequest } from '@app-types/auth';
+import { useAuth } from '@hooks/useAuth';
 
 
 function RegisterForm () {
     const { control, handleSubmit, formState: { errors }, reset } = useForm<RegisterRequest>();
     const [showPassword, setShowPassword] = useState(false);
+    
+    const { registerMutation } = useAuth();
 
-    const handleRegister = (data : RegisterRequest) => {
-        console.log(data);
+    const handleRegister = async (data : RegisterRequest) => {
+        await registerMutation.mutateAsync(data)
         reset();
     }
 
@@ -110,8 +113,11 @@ function RegisterForm () {
                     )}
                 />
 
-                <Button type='submit' fullWidth variant="contained" sx={{ bgcolor: 'primary.main', mb: {xs: 1} }}>
-                    Sign up
+                <Button 
+                    type='submit' fullWidth variant="contained" sx={{ bgcolor: 'primary.main', mb: {xs: 1} }} 
+                    disabled={registerMutation.isPending}
+                >
+                    {registerMutation.isPending ? 'Signing up...' : 'Sign up'}
                 </Button>
 
                 <Typography align="center" color="textSecondary">
