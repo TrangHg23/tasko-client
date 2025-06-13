@@ -1,6 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "@pages/Home";
-import { LogIn, NotFound, SignUp } from "./pages";
+import { LogIn, NotFound, SignUp } from "../pages";
 import PrivateRoute from "@routes/PrivateRoute";
 import MainLayout from "@layouts/MainLayout";
 import PublicRoute from "@routes/PublicRoute";
