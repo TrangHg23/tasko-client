@@ -4,15 +4,18 @@ import { Link } from 'react-router-dom';
 import { Controller, useForm} from 'react-hook-form';
 import { useState } from 'react';
 import type { LoginRequest } from '@app-types/auth';
+import { useAuth } from '@hooks/useAuth';
 
 
 function LoginForm () {
     const { control, handleSubmit, formState: { errors }, reset } = useForm<LoginRequest>();
     const [showPassword, setShowPassword] = useState(false);
+    const { loginMutation } = useAuth();
 
-    const handleLogin = (data : LoginRequest) => {
-    console.log(data)
-    reset();
+    const handleLogin = async (data : LoginRequest) => {
+        console.log(data)
+        await loginMutation.mutateAsync(data);
+        reset();
     }
 
     return (
@@ -92,15 +95,18 @@ function LoginForm () {
                     )}
                 />
 
-                <Button type='submit' fullWidth variant="contained" sx={{ bgcolor: 'primary.main', mb: {xs: 1} }}>
-                    Log in
+                <Button 
+                    type='submit' fullWidth variant="contained" sx={{ bgcolor: 'primary.main', mb: {xs: 1} }} 
+                    disabled = {loginMutation.isPending}
+                >
+                    {loginMutation.isPending ? 'Logging in...' : 'Login'}
                 </Button>
 
                 <Typography align="center" color="textSecondary">
                     {`Don't have an account? `}
                 <Box
                     component={Link}
-                    to="/signup"
+                    to="/auth/signup"
                     sx={{ color: 'primary.main', fontWeight: 500 }}
                 >
                     Sign up

@@ -1,8 +1,8 @@
 import { motion, AnimatePresence, easeOut } from 'framer-motion';
-import LoginForm from './LoginForm';
-import RegisterForm from './RegisterForm';
 import { Box } from '@mui/material';
 import { useLocation } from 'react-router-dom';
+import LoginForm from '@components/auth/LoginForm';
+import RegisterForm from '@components/auth/RegisterForm';
 
 const variants = {
   initial: { opacity: 0, scale: 0.98, y: 10 },
@@ -12,9 +12,9 @@ const variants = {
 };
 
 
-export default function AuthForm() {
+export default function Auth() {
 const location = useLocation();
-const mode = location.pathname === '/signup' ? 'register' : 'login';
+const mode = location.pathname === '/auth/login' ? 'login' : 'signup';
 
   return (
     <Box>
@@ -34,7 +34,7 @@ const mode = location.pathname === '/signup' ? 'register' : 'login';
 
           ) : (
             <motion.div
-              key='register'
+              key='signup'
               initial="initial"
               animate="animate"
               exit="exit"

@@ -33,6 +33,7 @@
       "@layouts/*": ["src/layouts/*"],
       "@app-types/*": ["src/types/*"],
       "@lib/*": ["src/lib/*"],
+      "@assets/*": ["src/assets/*"]
     }
 
   },

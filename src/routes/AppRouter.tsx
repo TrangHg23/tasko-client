@@ -1,22 +1,47 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "@pages/Home";
-import { LogIn, NotFound, SignUp } from "../pages";
 import PrivateRoute from "@routes/PrivateRoute";
 import MainLayout from "@layouts/MainLayout";
 import PublicRoute from "@routes/PublicRoute";
+import AuthLayout from "@layouts/AuthLayout";
+import Auth from "@pages/auth/Auth";
+import NotFound from "@pages/NotFound";
 
 const router = createBrowserRouter([
-    {
-      path: '/',
-      element: <PrivateRoute><MainLayout/></PrivateRoute>,
-      children: [
-        {index: true, element: <Home/>}
-      ]  
-    },
-    {path: '/login', element: <PublicRoute><LogIn/></PublicRoute>},
-    {path: '/signup', element: <PublicRoute><SignUp/></PublicRoute>},
-    {path: '*', element: <PublicRoute><NotFound/></PublicRoute>}
-])
+  {
+    element: <PrivateRoute />, 
+    children: [
+      {
+        path: "/",
+        element: <MainLayout />, 
+        children: [
+          { index: true, element: <Home /> }
+        ]
+      }
+    ]
+  },
+  {
+    path: "/auth",
+    element: <PublicRoute />, 
+    children: [
+      {
+        element: <AuthLayout />, 
+        children: [
+          { path: "login", element: <Auth /> },
+          { path: "signup", element: <Auth /> }
+        ]
+      }
+    ]
+  },
+  {
+    path: "*",
+    element: <PublicRoute />, 
+    children: [
+      { index: true, element: <NotFound /> }
+    ]
+  }
+]);
+
 
 export default function AppRouter() {
     return <RouterProvider router={router}/>

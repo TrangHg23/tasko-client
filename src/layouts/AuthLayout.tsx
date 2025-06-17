@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Box,
   Paper,
@@ -6,8 +5,10 @@ import {
   Typography,
 } from '@mui/material';
 import AuthSwitchButtons from '@components/auth/AuthSwitchButtons';
+import { Outlet } from 'react-router-dom';
+import authImg from '@assets/auth.webp'
 
-const AuthLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const AuthLayout = () => {
   return (
     <Box sx={{ minHeight: '100vh', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', p: 2}}>
       <Box sx={{ position: 'fixed', inset: 0, zIndex: -1, display: 'flex'}}>
@@ -27,7 +28,7 @@ const AuthLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           sx={{
             flex: {md: 1, lg: 1.5},
             position: 'relative',
-            backgroundImage: `url('src/assets/auth.png')`,
+            backgroundImage: `url(${authImg})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             display: { xs: 'none', md: 'block' },
@@ -47,12 +48,12 @@ const AuthLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           clipPath: 'polygon(5% 0, 100% 0%, 100% 100%, 0 100%)'
         }}>
           <Box display="flex" alignItems="center">
-            <Avatar src="./logo.png" sx={{ width: 30, mr: 1, mb: 1 }} />
+            <Avatar src="/logo.webp" sx={{ width: 30, mr: 1, mb: 1 }} />
             <Typography variant="h5" fontWeight="bold">
               Tasko
             </Typography>
           </Box>
-          {children}
+           <Outlet/>
         </Box>
       </Paper>
     </Box>
