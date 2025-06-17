@@ -6,8 +6,8 @@ const AuthSwitchButtons = () => {
   const navigate = useNavigate();
 
   const buttons = [
-    { label: 'Sign Up', path: '/signup' },
-    { label: 'Join Us', path: '/login' },
+    { label: 'Sign Up', path: '/auth/signup' },
+    { label: 'Join Us', path: '/auth/login' },
   ];
 
   return (

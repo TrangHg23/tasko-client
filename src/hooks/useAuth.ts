@@ -1,4 +1,4 @@
-import AuthContext from "@contexts/AuthContext";
+import { AuthContext } from "@contexts/AuthContext";
 import { useMutation } from "@tanstack/react-query";
 import { useSnackbar } from "notistack";
 import { useContext } from "react";
@@ -14,19 +14,32 @@ export const useAuth = () =>  {
         
     const registerMutation = useMutation({
         mutationFn: authAPI.register,
-        onSuccess: (data) => {
-            console.log(data);
+        onSuccess: () => {
             enqueueSnackbar('Sign up successfully!', {variant: 'success'});
-            navigate('/login')
+            navigate('/auth/login')
         },
          onError: () => {
             enqueueSnackbar('Something went wrong, please try again', {variant: 'error'});
         }
     });
 
+    const loginMutation = useMutation({
+        mutationFn: authAPI.login,
+        onSuccess: (data) => {
+            enqueueSnackbar('Log in successfully!', {variant: 'success'});
+            context.login(data.accessToken);
+            navigate('/');
+        },
+        onError: (error) => {
+            console.log(error)
+            enqueueSnackbar('Something went wrong when trying login', {variant: 'error'});
+        }
+    })
+
     return {
-        context,
-        registerMutation
+        ...context,
+        registerMutation,
+        loginMutation
     };
 
 }

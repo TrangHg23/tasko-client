@@ -124,7 +124,7 @@ function RegisterForm () {
                     {`Already have an account? `}
                 <Box
                     component={Link}
-                    to="/login"
+                    to="/auth/login"
                     sx={{ color: 'primary.main', fontWeight: 500 }}
                 >
                     Log in
