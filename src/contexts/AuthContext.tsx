@@ -1,11 +1,10 @@
 import type { User } from '@app-types/auth';
 import React, { createContext, useState, useEffect } from 'react';
-
 interface AuthContextType {
   user: User | undefined; 
   loading: boolean;
   isAuthenticated: boolean;
-  login: (accessToken: string) => void;
+  login: (accessToken: string, refreshToken: string) => void;
   logout: () => void;
 }
 
@@ -17,7 +16,7 @@ export const AuthProvider = ({ children } : { children: React.ReactNode }) => {
 
   useEffect(() => {
     const checkAuth = () => {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("access_token");
       if (!token) {
         setLoading(false);
         return;
@@ -29,10 +28,10 @@ export const AuthProvider = ({ children } : { children: React.ReactNode }) => {
         if (Date.now() < exp) {
           setUser(payload);
         } else {
-          localStorage.removeItem("token");
+          localStorage.removeItem("access_token");
         }
       } catch {
-        localStorage.removeItem("token");
+        localStorage.removeItem("access_token");
       } finally {
         setLoading(false);
       }
@@ -41,8 +40,9 @@ export const AuthProvider = ({ children } : { children: React.ReactNode }) => {
     checkAuth();
   }, []);
 
-  const login = (accessToken: string) => {
-    localStorage.setItem("token", accessToken);
+  const login = (accessToken: string, refreshToken: string) => {
+    localStorage.setItem("access_token", accessToken);
+    localStorage.setItem("refresh_token", refreshToken);
     try {
       const payload = JSON.parse(atob(accessToken.split(".")[1]));
       setUser(payload);
@@ -52,7 +52,9 @@ export const AuthProvider = ({ children } : { children: React.ReactNode }) => {
   };
 
   const logout = () => {
-    
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
+    setUser(undefined);
   };
 
   const isAuthenticated = !!user;
