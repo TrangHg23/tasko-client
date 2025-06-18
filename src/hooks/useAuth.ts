@@ -27,7 +27,7 @@ export const useAuth = () =>  {
         mutationFn: authAPI.login,
         onSuccess: (data) => {
             enqueueSnackbar('Log in successfully!', {variant: 'success'});
-            context.login(data.accessToken);
+            context.login(data.accessToken, data.refreshToken);
             navigate('/');
         },
         onError: (error) => {
@@ -36,10 +36,23 @@ export const useAuth = () =>  {
         }
     })
 
+    const logoutMutation = useMutation({
+        mutationFn: authAPI.logout,
+        retry: false,
+        onSuccess: () => {
+            enqueueSnackbar('Logout successfully!', {variant: 'success'});  
+        },
+        onError: (error) => {
+            console.error(error)
+            enqueueSnackbar('Logout failed. Please try again!', {variant: 'error'});
+        }
+    })
+
     return {
         ...context,
         registerMutation,
-        loginMutation
+        loginMutation,
+        logoutMutation
     };
 
 }

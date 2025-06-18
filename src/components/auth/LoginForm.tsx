@@ -13,7 +13,6 @@ function LoginForm () {
     const { loginMutation } = useAuth();
 
     const handleLogin = async (data : LoginRequest) => {
-        console.log(data)
         await loginMutation.mutateAsync(data);
         reset();
     }
