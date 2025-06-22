@@ -1,8 +1,11 @@
-import { useAuth } from "@hooks/useAuth"
+import { useAuth } from "@hooks/auth/useAuth"
 import { Box, Button } from "@mui/material"
+import { enqueueSnackbar } from "notistack";
+import { useNavigate } from "react-router-dom";
 
 function Home() {
-    const { logoutMutation, logout } = useAuth();
+    const { logoutMutation } = useAuth();
+    const navigate = useNavigate();
 
     const handleLogout = async () => {
         const accessToken = localStorage.getItem("access_token");
@@ -11,13 +14,13 @@ function Home() {
         if(accessToken && refreshToken) {
             try {
                 await logoutMutation.mutateAsync({accessToken,refreshToken});
+                enqueueSnackbar('Logout successfully!', { variant: 'success' });
             }
             catch(e) {
-               console.warn("Logout mutation throw caught in catch:", e);
-            } finally {
-                logout();
+                console.warn("Logout mutation throw caught in catch:", e);
             }
         }
+        navigate("/auth/login")
 
         
     }

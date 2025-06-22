@@ -1,0 +1,22 @@
+import type { User } from "@app-types/auth";
+import { useQuery } from "@tanstack/react-query";
+import { isAxiosError } from "axios";
+import { authAPI } from "src/services/auth";
+import { getAccessToken } from "src/utils/token";
+
+
+export const useUser = () => {
+    const token = getAccessToken();
+    return useQuery<User>({
+        queryKey: ['user'],
+        queryFn: authAPI.fetchUser,
+        enabled: !!token,
+        staleTime: 1000 * 60 * 5, // 5 minutes
+        retry: (failureCount, error) => {
+        if (isAxiosError(error) && error.response?.status === 401) {
+            return false;
+        }
+        return failureCount < 3;
+        },
+    });
+}
