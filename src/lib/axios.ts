@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { queryClient } from './queryClient';
 
 const API_BASE_URL = import.meta.env.VITE_BACKEND || 'http://localhost:8080';
 
@@ -33,7 +34,12 @@ apiClient.interceptors.response.use(
       return response.data;
     }
   }, (error) => {
-    return Promise.reject(error)
+    if (error.response?.status === 401) {
+      localStorage.removeItem('access_token');
+      queryClient.setQueryData(['user'], undefined);
+      window.location.href = '/auth/login';
+    }
+    return Promise.reject(error);
   }
 )
 

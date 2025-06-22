@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Controller, useForm} from 'react-hook-form';
 import { useState } from 'react';
 import type { RegisterRequest } from '@app-types/auth';
-import { useAuth } from '@hooks/useAuth';
+import { useAuth } from '@hooks/auth/useAuth';
 
 
 function RegisterForm () {

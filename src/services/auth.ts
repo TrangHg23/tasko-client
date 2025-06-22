@@ -1,4 +1,4 @@
-import type { LoginRequest, LogoutRequest, RegisterRequest } from "@app-types/auth";
+import type { LoginRequest, LogoutRequest, RegisterRequest, User } from "@app-types/auth";
 import apiClient from "@lib/axios";
 
 export const authAPI = {
@@ -14,6 +14,10 @@ export const authAPI = {
 
     logout: async(data: LogoutRequest) => {
         await apiClient.post("/auth/log-out", data);
+    },
+    fetchUser: async () : Promise<User> => {
+        const res = await apiClient.get("/auth/me")
+        return res.data;
     }
 
 }
