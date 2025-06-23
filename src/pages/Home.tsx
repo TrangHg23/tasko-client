@@ -2,14 +2,15 @@ import { useAuth } from "@hooks/auth/useAuth"
 import { Box, Button } from "@mui/material"
 import { enqueueSnackbar } from "notistack";
 import { useNavigate } from "react-router-dom";
+import { getAccessToken, getRefreshToken } from "src/utils/token";
 
 function Home() {
     const { logoutMutation } = useAuth();
     const navigate = useNavigate();
 
     const handleLogout = async () => {
-        const accessToken = localStorage.getItem("access_token");
-        const refreshToken = localStorage.getItem("refresh_token");
+        const accessToken = getAccessToken();
+        const refreshToken = getRefreshToken();
 
         if(accessToken && refreshToken) {
             try {
