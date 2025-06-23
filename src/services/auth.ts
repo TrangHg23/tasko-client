@@ -15,8 +15,14 @@ export const authAPI = {
     logout: async(data: LogoutRequest) => {
         await apiClient.post("/auth/log-out", data);
     },
+
     fetchUser: async () : Promise<User> => {
         const res = await apiClient.get("/auth/me")
+        return res.data;
+    },
+    
+    refresh: async(refreshToken: string) => {
+        const res = await apiClient.post("/auth/refresh", { refreshToken });
         return res.data;
     }
 
