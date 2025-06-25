@@ -1,6 +1,6 @@
 import { Button, Typography, Box, Stack } from '@mui/material';
 import InputField from './InputField';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { Controller, useForm} from 'react-hook-form';
 import { useState } from 'react';
 import type { LoginRequest } from '@app-types/auth';
@@ -62,6 +62,7 @@ function LoginForm () {
                         <InputField
                         type="email"
                         label="Email"
+                        autoComplete="email"
                         value={field.value}
                         onChange={field.onChange}
                         onBlur={field.onBlur}
@@ -82,6 +83,7 @@ function LoginForm () {
                     render={({ field }) => (
                         <InputField
                         type={showPassword ? "text" : "password"}
+                        autoComplete="current-password"
                         label="Password"
                         value={field.value}
                         onChange={field.onChange}

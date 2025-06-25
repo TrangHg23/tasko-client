@@ -1,7 +1,7 @@
 import { useAuth } from "@hooks/auth/useAuth"
 import { Box, Button } from "@mui/material"
 import { enqueueSnackbar } from "notistack";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { getAccessToken, getRefreshToken } from "src/utils/token";
 
 function Home() {

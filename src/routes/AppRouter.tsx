@@ -1,48 +1,87 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Home from "@pages/Home";
+import { createBrowserRouter, RouterProvider, type RouteObject } from "react-router";
+import { Suspense, lazy } from "react";
 import PrivateRoute from "@routes/PrivateRoute";
-import MainLayout from "@layouts/MainLayout";
 import PublicRoute from "@routes/PublicRoute";
+import MainLayout from "@layouts/MainLayout";
 import AuthLayout from "@layouts/AuthLayout";
-import Auth from "@pages/auth/Auth";
-import NotFound from "@pages/NotFound";
+import LoadingSpinner from "@components/common/LoadingSpinner";
+import ErrorBoundary from "@components/errors/ErrorBoundary";
+import NotFound from "@components/errors/NotFound";
 
-const router = createBrowserRouter([
+
+const Home = lazy(() => import("@pages/Home"));
+const Auth = lazy(() => import("@pages/auth/Auth"));
+
+
+const routesConfig: RouteObject[] = [
   {
-    element: <PrivateRoute />, 
+    element: <PrivateRoute />,
+    errorElement: <ErrorBoundary />,
     children: [
       {
         path: "/",
-        element: <MainLayout />, 
+        element: <MainLayout />,
         children: [
-          { index: true, element: <Home /> }
-        ]
-      }
-    ]
+          {
+            index: true,
+            element: (
+              <Suspense fallback={<LoadingSpinner />}>
+                <Home />
+              </Suspense>
+            ),
+          },
+        ],
+      },
+    ],
   },
   {
     path: "/auth",
-    element: <PublicRoute />, 
+    element: <PublicRoute />,
+    errorElement: <ErrorBoundary />,
     children: [
       {
-        element: <AuthLayout />, 
+        element: <AuthLayout />,
         children: [
-          { path: "login", element: <Auth /> },
-          { path: "signup", element: <Auth /> }
-        ]
-      }
-    ]
+          {
+            path: "login",
+            element: (
+              <Suspense fallback={<LoadingSpinner />}>
+                <Auth />
+              </Suspense>
+            ),
+          },
+          {
+            path: "signup", 
+            element: (
+              <Suspense fallback={<LoadingSpinner />}>
+                <Auth />
+              </Suspense>
+            ),
+          },
+        ],
+      },
+    ],
   },
   {
     path: "*",
-    element: <PublicRoute />, 
-    children: [
-      { index: true, element: <NotFound /> }
-    ]
-  }
-]);
+    element: (
+      <Suspense fallback={<LoadingSpinner />}>
+        <NotFound />
+      </Suspense>
+    ),
+    errorElement: <ErrorBoundary />,
+  },
+];
 
 
-export default function AppRouter() {
-    return <RouterProvider router={router}/>
-}
+const router = createBrowserRouter(routesConfig);
+
+const AppRouter = () => {
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <RouterProvider router={router} />
+    </Suspense>
+  );
+};
+
+export default AppRouter;

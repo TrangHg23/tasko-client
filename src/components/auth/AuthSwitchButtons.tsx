@@ -1,5 +1,5 @@
 import { Box, Button, Stack } from '@mui/material';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router';
 
 const AuthSwitchButtons = () => {
   const location = useLocation();
