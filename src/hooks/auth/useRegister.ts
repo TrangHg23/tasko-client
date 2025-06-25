@@ -2,7 +2,7 @@ import isAxiosError from "@app-types/error";
 import { queryClient } from "@lib/queryClient";
 import { useMutation } from "@tanstack/react-query";
 import { useSnackbar } from "notistack";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { authAPI } from "src/services/auth";
 import { setTokens } from "src/utils/token";
 

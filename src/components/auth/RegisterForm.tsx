@@ -1,6 +1,6 @@
 import { Button, Typography, Box, Stack } from '@mui/material';
 import InputField from './InputField';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { Controller, useForm} from 'react-hook-form';
 import { useState } from 'react';
 import type { RegisterRequest } from '@app-types/auth';
@@ -55,13 +55,14 @@ function RegisterForm () {
                     rules={{ required: "Name is required" }}
                     render={({ field }) => (
                         <InputField
-                        type="text"
-                        label="Name"
-                        value={field.value ?? ""}
-                        onChange={field.onChange}
-                        onBlur={field.onBlur}
-                        error={!!errors.name}
-                        helperText={errors.name?.message || " "}
+                            type="text"
+                            label="Name"
+                            autoComplete="new-name"
+                            value={field.value ?? ""}
+                            onChange={field.onChange}
+                            onBlur={field.onBlur}
+                            error={!!errors.name}
+                            helperText={errors.name?.message || " "}
                         />
                     )}
                 />
@@ -78,13 +79,14 @@ function RegisterForm () {
                     }}
                     render={({ field }) => (
                         <InputField
-                        type="email"
-                        label="Email"
-                        value={field.value}
-                        onChange={field.onChange}
-                        onBlur={field.onBlur}
-                        error={!!errors.email}
-                        helperText={errors.email?.message || " "}
+                            type="email"
+                            label="Email"
+                            autoComplete="new-email"
+                            value={field.value}
+                            onChange={field.onChange}
+                            onBlur={field.onBlur}
+                            error={!!errors.email}
+                            helperText={errors.email?.message || " "}
                         />
                     )}
                 />
@@ -102,6 +104,7 @@ function RegisterForm () {
                         <InputField
                         type={showPassword ? "text" : "password"}
                         label="Password"
+                        autoComplete="new-password"
                         value={field.value}
                         onChange={field.onChange}
                         onBlur={field.onBlur}

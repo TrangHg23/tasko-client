@@ -11,9 +11,10 @@ type InputFieldProps = {
   helperText?: string;
   showPasswordToggle?: boolean;
   onTogglePassword?: () => void;
+  autoComplete?: string;
 }
 
-const InputField = ({ type, label, value, onChange, onBlur, error, helperText, showPasswordToggle, onTogglePassword }: InputFieldProps) => {
+const InputField = ({ type, label, value, onChange, onBlur, error, helperText, showPasswordToggle, onTogglePassword, autoComplete }: InputFieldProps) => {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down('md'));
   return (
@@ -27,6 +28,7 @@ const InputField = ({ type, label, value, onChange, onBlur, error, helperText, s
       fullWidth
       variant="outlined"
       label={label}
+      autoComplete={autoComplete}
       size={isSmall ? 'small' : 'medium'}
       slotProps={{
         input: showPasswordToggle ? {

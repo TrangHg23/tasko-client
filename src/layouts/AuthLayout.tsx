@@ -5,7 +5,7 @@ import {
   Typography,
 } from '@mui/material';
 import AuthSwitchButtons from '@components/auth/AuthSwitchButtons';
-import { Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router';
 import authImg from '@assets/auth.webp'
 
 const AuthLayout = () => {
@@ -45,7 +45,6 @@ const AuthLayout = () => {
           height: { xs: 'auto', md: '75vh' }, 
           minHeight: { xs: 400, md: 500 },
           flex: 1, p: 4, display: 'flex', flexDirection: 'column', justifyContent: 'center', 
-          clipPath: 'polygon(5% 0, 100% 0%, 100% 100%, 0 100%)'
         }}>
           <Box display="flex" alignItems="center">
             <Avatar src="/logo.webp" sx={{ width: 30, mr: 1, mb: 1 }} />
