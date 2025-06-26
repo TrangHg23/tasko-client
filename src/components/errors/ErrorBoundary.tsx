@@ -1,15 +1,7 @@
-import { useRouteError } from "react-router";
-import {
-  Box,
-  Typography,
-  Button,
-  Paper,
-  Container,
-  Stack,
-  useTheme,
-} from "@mui/material";
-import { Warning as WarningIcon } from "@mui/icons-material";
-import logo from "/logo.webp";
+import { useRouteError } from 'react-router';
+import { Box, Typography, Button, Paper, Container, Stack, useTheme } from '@mui/material';
+import { Warning as WarningIcon } from '@mui/icons-material';
+import BrandLogo from '@components/common/BrandLogo';
 
 const ErrorBoundary = () => {
   const error = useRouteError() as Error | undefined;
@@ -24,10 +16,10 @@ const ErrorBoundary = () => {
       {/* Background */}
       <Box
         sx={{
-          position: "fixed",
+          position: 'fixed',
           inset: 0,
           zIndex: -1,
-          background: "linear-gradient(to right, #E3F2FD, #1976D2)",
+          background: 'linear-gradient(to right, #E3F2FD, #1976D2)',
         }}
       />
 
@@ -35,10 +27,10 @@ const ErrorBoundary = () => {
       <Container
         maxWidth="sm"
         sx={{
-          height: "100vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+          height: '100vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
         }}
       >
         <Paper
@@ -46,21 +38,11 @@ const ErrorBoundary = () => {
           sx={{
             p: 4,
             borderRadius: 2,
-            textAlign: "center",
+            textAlign: 'center',
             borderLeft: `4px solid ${theme.palette.error.main}`,
           }}
         >
-          {/* Logo + App Name */}
-          <Box
-            component="a"
-            href="/"
-            sx={{ display: "flex", alignItems: "center", mb: 2, textDecoration: "none", color: "inherit"}}
-          >
-            <Box component="img" src={logo} alt="Website Logo" sx={{ height: 48, mr: 1, mb: 1}}/>
-            <Typography variant="h5" fontWeight="bold">
-              Tasko
-            </Typography>
-          </Box>
+          <BrandLogo />
 
           <Stack spacing={3} alignItems="center">
             <WarningIcon color="error" sx={{ fontSize: 60 }} />
@@ -74,15 +56,15 @@ const ErrorBoundary = () => {
                 p: 2,
                 backgroundColor: theme.palette.grey[100],
                 borderRadius: 1,
-                textAlign: "left",
-                fontFamily: "monospace",
-                maxHeight: "200px",
-                overflow: "auto",
-                whiteSpace: "pre-wrap",
+                textAlign: 'left',
+                fontFamily: 'monospace',
+                maxHeight: '200px',
+                overflow: 'auto',
+                whiteSpace: 'pre-wrap',
               }}
             >
               <Typography variant="body1">
-                {error?.message || "An unexpected error occurred."}
+                {error?.message || 'An unexpected error occurred.'}
               </Typography>
               {error?.stack && (
                 <Typography variant="caption" component="pre">

@@ -1,17 +1,22 @@
-import {
-  Box,
-  Paper,
-  Avatar,
-  Typography,
-} from '@mui/material';
+import { Box, Paper } from '@mui/material';
 import AuthSwitchButtons from '@components/auth/AuthSwitchButtons';
 import { Outlet } from 'react-router';
-import authImg from '@assets/auth.webp'
+import authImg from '@assets/auth.webp';
+import BrandLogo from '@components/common/BrandLogo';
 
 const AuthLayout = () => {
   return (
-    <Box sx={{ minHeight: '100vh', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', p: 2}}>
-      <Box sx={{ position: 'fixed', inset: 0, zIndex: -1, display: 'flex'}}>
+    <Box
+      sx={{
+        minHeight: '100vh',
+        position: 'relative',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        p: 2,
+      }}
+    >
+      <Box sx={{ position: 'fixed', inset: 0, zIndex: -1, display: 'flex' }}>
         <Box
           sx={(theme) => ({
             flex: 1,
@@ -23,10 +28,13 @@ const AuthLayout = () => {
           })}
         />
       </Box>
-      <Paper elevation={3} sx={{ maxWidth: 1000, width: '100%', display: 'flex', borderRadius: 5, overflow: 'hidden'}}>
+      <Paper
+        elevation={3}
+        sx={{ maxWidth: 1000, width: '100%', display: 'flex', borderRadius: 5, overflow: 'hidden' }}
+      >
         <Box
           sx={{
-            flex: {md: 1, lg: 1.5},
+            flex: { md: 1, lg: 1.5 },
             position: 'relative',
             backgroundImage: `url(${authImg})`,
             backgroundSize: 'cover',
@@ -38,21 +46,22 @@ const AuthLayout = () => {
             overflow: 'hidden',
           }}
         >
-          <AuthSwitchButtons/>
+          <AuthSwitchButtons />
         </Box>
 
-        <Box sx={{
-          height: { xs: 'auto', md: '75vh' }, 
-          minHeight: { xs: 400, md: 500 },
-          flex: 1, p: 4, display: 'flex', flexDirection: 'column', justifyContent: 'center', 
-        }}>
-          <Box display="flex" alignItems="center">
-            <Avatar src="/logo.webp" sx={{ width: 30, mr: 1, mb: 1 }} />
-            <Typography variant="h5" fontWeight="bold">
-              Tasko
-            </Typography>
-          </Box>
-           <Outlet/>
+        <Box
+          sx={{
+            height: { xs: 'auto', md: '75vh' },
+            minHeight: { xs: 400, md: 500 },
+            flex: 1,
+            p: 4,
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+          }}
+        >
+          <BrandLogo />
+          <Outlet />
         </Box>
       </Paper>
     </Box>
