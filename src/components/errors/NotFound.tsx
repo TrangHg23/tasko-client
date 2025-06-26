@@ -1,42 +1,34 @@
-import { useNavigate } from "react-router";
-import {
-  Box,
-  Button,
-  Container,
-  Typography,
-  Paper,
-  Stack,
-  useTheme,
-} from "@mui/material";
-import { Home as HomeIcon } from "@mui/icons-material";
-import logo from "/logo.webp";
+import { useNavigate } from 'react-router';
+import { Box, Button, Container, Typography, Paper, Stack, useTheme } from '@mui/material';
+import { Home as HomeIcon } from '@mui/icons-material';
+import BrandLogo from '@components/common/BrandLogo';
 
 function NotFound() {
   const navigate = useNavigate();
   const theme = useTheme();
 
-  const handleGoHome = () => navigate("/");
+  const handleGoHome = () => navigate('/');
 
   return (
     <>
       {/* Background*/}
       <Box
         sx={{
-          position: "fixed",
+          position: 'fixed',
           inset: 0,
           zIndex: -1,
-          background: "linear-gradient(to right, #E3F2FD, #1976D2)",
+          background: 'linear-gradient(to right, #E3F2FD, #1976D2)',
         }}
       />
 
       <Container
         maxWidth="sm"
         sx={{
-          height: "100vh",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
+          height: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
           gap: 4,
         }}
       >
@@ -45,40 +37,24 @@ function NotFound() {
           sx={{
             p: 4,
             borderRadius: 2,
-            textAlign: "center",
+            textAlign: 'center',
             borderLeft: `4px solid ${theme.palette.warning.main}`,
-            width: "100%",
+            width: '100%',
           }}
         >
           {/* Logo & App name */}
-          <Box
-            onClick={handleGoHome}
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              mb: 2,
-              textDecoration: "none",
-              cursor: "pointer",
-            }}
-          >
-            <Box component="img" src={logo} alt="Website Logo" sx={{ height: 48, mr: 1, mb: 1}}
-            />
-            <Typography variant="h5" fontWeight="bold">
-              Tasko
-            </Typography>
-          </Box>
+          <BrandLogo />
 
           <Stack spacing={3} alignItems="center">
             <Box
               sx={{
                 width: 100,
                 height: 100,
-                borderRadius: "50%",
+                borderRadius: '50%',
                 bgcolor: theme.palette.warning.light,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
             >
               <Typography variant="h3" color="warning.contrastText">
@@ -103,7 +79,7 @@ function NotFound() {
                 mt: 2,
                 px: 4,
                 bgcolor: theme.palette.warning.main,
-                "&:hover": {
+                '&:hover': {
                   bgcolor: theme.palette.warning.dark,
                 },
               }}
