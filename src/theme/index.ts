@@ -7,7 +7,7 @@ const baseTheme = createTheme({
     primary: { main: '#1976D2' },
     secondary: { main: '#4CAF50' },
     warning: { main: '#FF9800' },
-    background: { default: '#F5F5F5', paper: '#FFFFFF' },
+    background: { default: '#ffff', paper: '#f5f5f5' },
     text: { primary: '#424242' },
   },
 
@@ -16,6 +16,7 @@ const baseTheme = createTheme({
     h1: { fontWeight: 700, fontSize: '2rem' },
     h2: { fontWeight: 600, fontSize: '1.5rem' },
     body1: { fontWeight: 400, fontSize: '1rem', lineHeight: 1.5 },
+    body2: { fontWeight: 500, fontSize: '0.875rem' },
     button: { fontWeight: 600, textTransform: 'none' },
   },
 });

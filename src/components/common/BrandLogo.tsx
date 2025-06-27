@@ -5,7 +5,7 @@ function BrandLogo() {
   return (
     <Box
       component="a"
-      href="/"
+      href="/today"
       sx={{
         display: 'flex',
         alignItems: 'center',

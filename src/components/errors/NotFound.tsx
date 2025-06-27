@@ -7,7 +7,7 @@ function NotFound() {
   const navigate = useNavigate();
   const theme = useTheme();
 
-  const handleGoHome = () => navigate('/');
+  const handleGoHome = () => navigate('/today');
 
   return (
     <>

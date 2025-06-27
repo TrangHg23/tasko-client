@@ -16,7 +16,15 @@ const AuthLayout = () => {
         p: 2,
       }}
     >
-      <Box sx={{ position: 'fixed', inset: 0, zIndex: -1, display: 'flex' }}>
+      <Box
+        sx={{
+          position: 'fixed',
+          inset: 0,
+          zIndex: -1,
+          display: 'flex',
+          bgcolor: 'background.paper',
+        }}
+      >
         <Box
           sx={(theme) => ({
             flex: 1,
@@ -30,7 +38,14 @@ const AuthLayout = () => {
       </Box>
       <Paper
         elevation={3}
-        sx={{ maxWidth: 1000, width: '100%', display: 'flex', borderRadius: 5, overflow: 'hidden' }}
+        sx={{
+          bgcolor: 'background.default',
+          maxWidth: 1000,
+          width: '100%',
+          display: 'flex',
+          borderRadius: 5,
+          overflow: 'hidden',
+        }}
       >
         <Box
           sx={{
