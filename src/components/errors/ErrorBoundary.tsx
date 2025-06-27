@@ -77,7 +77,7 @@ const ErrorBoundary = () => {
               <Button variant="contained" onClick={handleRefresh} color="error">
                 Refresh Page
               </Button>
-              <Button variant="outlined" href="/" color="error">
+              <Button variant="outlined" href="/today" color="error">
                 Go to Home
               </Button>
             </Stack>

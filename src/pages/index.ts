@@ -1,3 +1,3 @@
-export { default as Home } from './Home'
-export { default as Auth } from './auth/Auth'
-export { default as NotFound} from '../components/errors/NotFound'
+export { default as Auth } from './auth/Auth';
+export { default as InboxPage } from './InboxPage';
+export { default as TodayPage } from './TodayPage';

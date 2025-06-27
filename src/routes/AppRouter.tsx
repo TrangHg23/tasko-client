@@ -1,41 +1,19 @@
-import { createBrowserRouter, RouterProvider, type RouteObject } from "react-router";
-import { Suspense, lazy } from "react";
-import PrivateRoute from "@routes/PrivateRoute";
-import PublicRoute from "@routes/PublicRoute";
-import MainLayout from "@layouts/MainLayout";
-import AuthLayout from "@layouts/AuthLayout";
-import LoadingSpinner from "@components/common/LoadingSpinner";
-import ErrorBoundary from "@components/errors/ErrorBoundary";
-import NotFound from "@components/errors/NotFound";
+import { createBrowserRouter, RouterProvider, type RouteObject } from 'react-router';
+import { Suspense, lazy } from 'react';
+import PublicRoute from '@routes/PublicRoute';
+import MainLayout from '@layouts/MainLayout';
+import AuthLayout from '@layouts/AuthLayout';
+import LoadingSpinner from '@components/common/LoadingSpinner';
+import ErrorBoundary from '@components/errors/ErrorBoundary';
+import NotFound from '@components/errors/NotFound';
+import PrivateRoute from './PrivateRoute';
+import { InboxPage, TodayPage } from '@pages/index';
 
-
-const Home = lazy(() => import("@pages/Home"));
-const Auth = lazy(() => import("@pages/auth/Auth"));
-
+const Auth = lazy(() => import('@pages/auth/Auth'));
 
 const routesConfig: RouteObject[] = [
   {
-    element: <PrivateRoute />,
-    errorElement: <ErrorBoundary />,
-    children: [
-      {
-        path: "/",
-        element: <MainLayout />,
-        children: [
-          {
-            index: true,
-            element: (
-              <Suspense fallback={<LoadingSpinner />}>
-                <Home />
-              </Suspense>
-            ),
-          },
-        ],
-      },
-    ],
-  },
-  {
-    path: "/auth",
+    path: '/auth',
     element: <PublicRoute />,
     errorElement: <ErrorBoundary />,
     children: [
@@ -43,7 +21,7 @@ const routesConfig: RouteObject[] = [
         element: <AuthLayout />,
         children: [
           {
-            path: "login",
+            path: 'login',
             element: (
               <Suspense fallback={<LoadingSpinner />}>
                 <Auth />
@@ -51,7 +29,7 @@ const routesConfig: RouteObject[] = [
             ),
           },
           {
-            path: "signup", 
+            path: 'signup',
             element: (
               <Suspense fallback={<LoadingSpinner />}>
                 <Auth />
@@ -63,7 +41,34 @@ const routesConfig: RouteObject[] = [
     ],
   },
   {
-    path: "*",
+    path: '/',
+    element: <PrivateRoute />,
+    children: [
+      {
+        element: <MainLayout />,
+        children: [
+          {
+            path: 'today',
+            element: (
+              <Suspense fallback={<LoadingSpinner />}>
+                <TodayPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: 'inbox',
+            element: (
+              <Suspense fallback={<LoadingSpinner />}>
+                <InboxPage />
+              </Suspense>
+            ),
+          },
+        ],
+      },
+    ],
+  },
+  {
+    path: '*',
     element: (
       <Suspense fallback={<LoadingSpinner />}>
         <NotFound />
@@ -72,7 +77,6 @@ const routesConfig: RouteObject[] = [
     errorElement: <ErrorBoundary />,
   },
 ];
-
 
 const router = createBrowserRouter(routesConfig);
 

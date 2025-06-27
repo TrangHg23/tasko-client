@@ -4,9 +4,9 @@ import { Navigate, Outlet } from 'react-router';
 
 export default function PublicRoute() {
   const { isAuthenticated, isLoading } = useAuth();
-  
-    if (isLoading) {
-      return <LoadingSpinner/>
-    }
-  return isAuthenticated ? <Navigate to="/" replace/>: <Outlet/>;
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+  return isAuthenticated ? <Navigate to="/today" replace /> : <Outlet />;
 }
