@@ -1,3 +1,4 @@
+import CategoryComponent from '@components/Category';
 import UserMenu from '@components/UserMenu';
 import { Drawer, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import { NavLink } from 'react-router';
@@ -45,6 +46,7 @@ function Sidebar() {
             />
           </ListItemButton>
         ))}
+        <CategoryComponent />
       </List>
     </Drawer>
   );

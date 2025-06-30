@@ -5,9 +5,11 @@ const baseTheme = createTheme({
 
   palette: {
     primary: { main: '#1976D2' },
-    secondary: { main: '#4CAF50' },
+    secondary: { main: '#9C27B0' },
+    success: { main: '#4CAF50' },
     warning: { main: '#FF9800' },
-    background: { default: '#ffff', paper: '#f5f5f5' },
+    error: { main: '#F44336' },
+    background: { default: '#ffff', paper: '#f5f5f5', popup: '#fafafa' },
     text: { primary: '#424242' },
   },
 

@@ -16,6 +16,13 @@ export interface LoginRequest {
 }
 
 export interface LogoutRequest {
-  accessToken: string,
-  refreshToken: string
+  accessToken: string;
+  refreshToken: string;
 }
+
+export interface Category {
+  id: string;
+  name: string;
+}
+
+export type CategoryRequest = Pick<Category, 'name'>;
