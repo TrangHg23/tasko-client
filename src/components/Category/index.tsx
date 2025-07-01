@@ -1,4 +1,4 @@
-import { useCategories } from '@hooks/useCategory';
+import { useAddCategory, useCategories, useUpdateCategory } from '@hooks/useCategory';
 import {
   Add,
   Category,
@@ -22,7 +22,8 @@ import {
   Typography,
 } from '@mui/material';
 import { useState } from 'react';
-import CategoryModal from './CategoryModal';
+import CategoryDialog from './CategoryDialog';
+import type { CategoryRequest, ICategory } from '@app-types/category';
 
 export default function CategoryComponent() {
   const [open, setOpen] = useState(true);
@@ -30,23 +31,49 @@ export default function CategoryComponent() {
 
   const { data: categories = [] } = useCategories();
 
-  const [openModal, setOpenModal] = useState(false);
-  const handleOpenModal = () => setOpenModal(true);
+  const { mutateAsync: mutateAsyncAdd, isPending: isPendingAdd } = useAddCategory();
+  const { mutateAsync: mutateAsyncUpdate, isPending: isPendingUpdate } = useUpdateCategory();
 
+  const [openDialog, setOpenDialog] = useState(false);
+
+  const [selectedCategory, setSelectedCategory] = useState<ICategory | undefined>(undefined);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const openOption = Boolean(anchorEl);
 
-  const [selectedId, setSelectedId] = useState<string | undefined>(undefined);
+  const handleAdd = () => {
+    setSelectedCategory(undefined);
+    setOpenDialog(true);
+  };
+
+  const handleEdit = (category: ICategory) => {
+    setSelectedCategory(category);
+    setOpenDialog(true);
+  };
+
+  const handleSubmit = async (data: CategoryRequest) => {
+    if (selectedCategory) {
+      const updateData = {
+        id: selectedCategory.id,
+        category: data,
+      };
+      await mutateAsyncUpdate(updateData);
+    } else {
+      await mutateAsyncAdd(data);
+    }
+
+    handleCloseOption();
+  };
 
   const handleDelete = () => {};
 
   const handleCloseOption = () => {
     setAnchorEl(null);
+    setSelectedCategory(undefined);
   };
 
-  const handleOpenMenu = (e: React.MouseEvent<HTMLButtonElement>, id: string | undefined) => {
+  const handleOpenMenu = (e: React.MouseEvent<HTMLButtonElement>, category: ICategory) => {
     setAnchorEl(e.currentTarget);
-    setSelectedId(id);
+    setSelectedCategory(category);
   };
 
   return (
@@ -68,7 +95,7 @@ export default function CategoryComponent() {
               </ListItemIcon>
             </Stack>
             <div>
-              <IconButton size="small" onClick={handleOpenModal}>
+              <IconButton size="small" onClick={handleAdd}>
                 <Add />
               </IconButton>
               <IconButton size="small" onClick={handleExpand}>
@@ -81,20 +108,23 @@ export default function CategoryComponent() {
         <Collapse in={open} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             {categories?.map((category) => (
-              <ListItemButton sx={{ pl: 4 }} key={category.id} disableRipple>
-                <ListItemText primary={category.name} />
-                <IconButton
-                  onClick={(e) => handleOpenMenu(e, category.id)}
-                  sx={{
-                    color: selectedId === category.id ? 'primary.main' : 'gray',
-                  }}
-                >
-                  <MoreHoriz />
-                </IconButton>
-              </ListItemButton>
+              <div key={category.id}>
+                <ListItemButton sx={{ pl: 4 }} key={category.id} disableRipple>
+                  <ListItemText primary={category.name} />
+                  <IconButton
+                    onClick={(e) => handleOpenMenu(e, category)}
+                    sx={{
+                      color: selectedCategory?.id === category.id ? 'primary.main' : 'gray',
+                    }}
+                  >
+                    <MoreHoriz />
+                  </IconButton>
+                </ListItemButton>
+              </div>
             ))}
           </List>
         </Collapse>
+
         <Menu
           id="option-menu"
           anchorEl={anchorEl}
@@ -105,7 +135,12 @@ export default function CategoryComponent() {
           open={openOption}
           onClose={handleCloseOption}
         >
-          <MenuItem sx={{ '&:hover': { color: 'secondary.main' }, bgcolor: 'background.popup' }}>
+          <MenuItem
+            sx={{ '&:hover': { color: 'secondary.main' }, bgcolor: 'background.popup' }}
+            onClick={() => {
+              if (selectedCategory) handleEdit(selectedCategory);
+            }}
+          >
             <Edit sx={{ mr: 1 }} fontSize="small" />
             Edit
           </MenuItem>
@@ -114,7 +149,14 @@ export default function CategoryComponent() {
             Delete
           </MenuItem>
         </Menu>
-        <CategoryModal open={openModal} setOpen={setOpenModal} />
+
+        <CategoryDialog
+          open={openDialog}
+          onClose={() => setOpenDialog(false)}
+          initialData={selectedCategory || undefined}
+          onSubmit={handleSubmit}
+          isPending={isPendingAdd || isPendingUpdate}
+        />
       </div>
     </Box>
   );
