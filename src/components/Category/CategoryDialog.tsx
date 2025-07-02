@@ -18,6 +18,7 @@ interface CategoryDialogProps {
   onSubmit: (data: CategoryRequest) => void;
   initialData?: { id?: string; name: string };
   isPending?: boolean;
+  onCloseOption: () => void;
 }
 export default function CategoryDialog({
   open,
@@ -25,10 +26,12 @@ export default function CategoryDialog({
   onSubmit,
   initialData,
   isPending,
+  onCloseOption,
 }: CategoryDialogProps) {
   const handleCloseModal = () => {
     onClose();
     reset();
+    onCloseOption();
   };
 
   const { control, handleSubmit, watch, reset } = useForm<CategoryRequest>();

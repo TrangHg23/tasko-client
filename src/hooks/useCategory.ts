@@ -38,3 +38,17 @@ export const useUpdateCategory = () => {
     },
   });
 };
+
+export const useDeleteCategory = () => {
+  return useMutation({
+    mutationKey: ['delete-category'],
+    mutationFn: categoryAPI.deleteCategory,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['categories'] });
+      enqueueSnackbar('Category deleted!', { variant: 'success' });
+    },
+    onError: () => {
+      enqueueSnackbar('Failed to delete category');
+    },
+  });
+};
