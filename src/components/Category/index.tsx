@@ -1,4 +1,9 @@
-import { useAddCategory, useCategories, useUpdateCategory } from '@hooks/useCategory';
+import {
+  useAddCategory,
+  useCategories,
+  useDeleteCategory,
+  useUpdateCategory,
+} from '@hooks/useCategory';
 import {
   Add,
   Category,
@@ -33,6 +38,7 @@ export default function CategoryComponent() {
 
   const { mutateAsync: mutateAsyncAdd, isPending: isPendingAdd } = useAddCategory();
   const { mutateAsync: mutateAsyncUpdate, isPending: isPendingUpdate } = useUpdateCategory();
+  const { mutateAsync: mutateAsyncDelete } = useDeleteCategory();
 
   const [openDialog, setOpenDialog] = useState(false);
 
@@ -47,6 +53,7 @@ export default function CategoryComponent() {
 
   const handleEdit = (category: ICategory) => {
     setSelectedCategory(category);
+    setAnchorEl(null);
     setOpenDialog(true);
   };
 
@@ -64,7 +71,10 @@ export default function CategoryComponent() {
     handleCloseOption();
   };
 
-  const handleDelete = () => {};
+  const handleDelete = (id: string) => {
+    mutateAsyncDelete(id);
+    handleCloseOption();
+  };
 
   const handleCloseOption = () => {
     setAnchorEl(null);
@@ -144,7 +154,12 @@ export default function CategoryComponent() {
             <Edit sx={{ mr: 1 }} fontSize="small" />
             Edit
           </MenuItem>
-          <MenuItem onClick={handleDelete} sx={{ '&:hover': { color: 'secondary.main' } }}>
+          <MenuItem
+            sx={{ '&:hover': { color: 'secondary.main' } }}
+            onClick={() => {
+              if (selectedCategory) handleDelete(selectedCategory.id);
+            }}
+          >
             <Delete sx={{ mr: 1 }} fontSize="small" />
             Delete
           </MenuItem>
@@ -156,6 +171,7 @@ export default function CategoryComponent() {
           initialData={selectedCategory || undefined}
           onSubmit={handleSubmit}
           isPending={isPendingAdd || isPendingUpdate}
+          onCloseOption={() => setSelectedCategory(undefined)}
         />
       </div>
     </Box>
