@@ -29,6 +29,8 @@ const AuthSwitchButtons = () => {
                 },
                 fontWeight: 500,
                 mx: 1,
+                borderRadius: 20,
+                minWidth: 120,
               }}
             >
               {label}

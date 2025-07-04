@@ -66,10 +66,13 @@ const AuthLayout = () => {
 
         <Box
           sx={{
+            width: '100%',
+            p: 3,
+            borderRadius: 2,
+            textAlign: 'center',
             height: { xs: 'auto', md: '75vh' },
             minHeight: { xs: 400, md: 500 },
             flex: 1,
-            p: 4,
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
