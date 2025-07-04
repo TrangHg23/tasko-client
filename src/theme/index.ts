@@ -41,7 +41,6 @@ let theme = createTheme(baseTheme, {
           },
         },
         outlined: {
-          borderRadius: 20,
           padding: baseTheme.spacing(1, 3),
         },
         text: {
