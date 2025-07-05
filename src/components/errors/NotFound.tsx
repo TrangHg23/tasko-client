@@ -48,8 +48,8 @@ function NotFound() {
           <Stack spacing={3} alignItems="center">
             <Box
               sx={{
-                width: 100,
-                height: 100,
+                width: 90,
+                height: 90,
                 borderRadius: '50%',
                 bgcolor: theme.palette.warning.light,
                 display: 'flex',
@@ -57,12 +57,12 @@ function NotFound() {
                 justifyContent: 'center',
               }}
             >
-              <Typography variant="h3" color="warning.contrastText">
+              <Typography variant="h4" color="warning.contrastText">
                 404
               </Typography>
             </Box>
 
-            <Typography variant="h4" component="h1">
+            <Typography variant="h5" component="h2">
               Page Not Found
             </Typography>
 
@@ -76,8 +76,8 @@ function NotFound() {
               startIcon={<HomeIcon />}
               onClick={handleGoHome}
               sx={{
-                mt: 2,
-                px: 4,
+                mt: 1,
+                px: 3,
                 bgcolor: theme.palette.warning.main,
                 '&:hover': {
                   bgcolor: theme.palette.warning.dark,

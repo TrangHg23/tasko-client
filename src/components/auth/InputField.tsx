@@ -1,5 +1,5 @@
-import { VisibilityOff, Visibility } from "@mui/icons-material";
-import { TextField, InputAdornment, IconButton, useTheme, useMediaQuery } from "@mui/material";
+import { VisibilityOff, Visibility } from '@mui/icons-material';
+import { TextField, InputAdornment, IconButton, useTheme, useMediaQuery } from '@mui/material';
 
 type InputFieldProps = {
   type: string;
@@ -12,11 +12,22 @@ type InputFieldProps = {
   showPasswordToggle?: boolean;
   onTogglePassword?: () => void;
   autoComplete?: string;
-}
+};
 
-const InputField = ({ type, label, value, onChange, onBlur, error, helperText, showPasswordToggle, onTogglePassword, autoComplete }: InputFieldProps) => {
+const InputField = ({
+  type,
+  label,
+  value,
+  onChange,
+  onBlur,
+  error,
+  helperText,
+  showPasswordToggle,
+  onTogglePassword,
+  autoComplete,
+}: InputFieldProps) => {
   const theme = useTheme();
-  const isSmall = useMediaQuery(theme.breakpoints.down('md'));
+  const isSmall = useMediaQuery(theme.breakpoints.down('sm'));
   return (
     <TextField
       type={type}
@@ -29,17 +40,19 @@ const InputField = ({ type, label, value, onChange, onBlur, error, helperText, s
       variant="outlined"
       label={label}
       autoComplete={autoComplete}
-      size={isSmall ? 'small' : 'medium'}
+      size={isSmall ? 'medium' : 'small'}
       slotProps={{
-        input: showPasswordToggle ? {
-        endAdornment: (
-          <InputAdornment position="end">
-            <IconButton onClick={onTogglePassword} edge="end">
-              {type === 'password' ? <VisibilityOff /> : <Visibility />}
-            </IconButton>
-          </InputAdornment>
-        )
-      } : undefined
+        input: showPasswordToggle
+          ? {
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={onTogglePassword} edge="end">
+                    {type === 'password' ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }
+          : undefined,
       }}
     />
   );

@@ -5,6 +5,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Divider,
   TextField,
   Typography,
 } from '@mui/material';
@@ -48,7 +49,6 @@ export default function CategoryDialog({
   }, [initialData, open, reset]);
 
   const handleSubmitDialog = (data: CategoryRequest) => {
-    console.log(data);
     onSubmit(data);
     handleCloseModal();
   };
@@ -58,7 +58,7 @@ export default function CategoryDialog({
       open={open}
       onClose={handleCloseModal}
       fullWidth
-      maxWidth="xs"
+      maxWidth="sm"
       slotProps={{
         paper: {
           sx: {
@@ -67,15 +67,14 @@ export default function CategoryDialog({
         },
       }}
     >
-      <DialogTitle>
-        <Typography variant="h6" component="div" sx={{ fontWeight: 600 }}>
-          {initialData ? 'Edit category' : 'Add new category'}
-        </Typography>
-      </DialogTitle>
+      <DialogTitle sx={{ pb: 1 }}>{initialData ? 'Edit category' : 'Add new category'}</DialogTitle>
 
+      <Divider />
       <Box component="form" onSubmit={handleSubmit(handleSubmitDialog)}>
-        <DialogContent sx={{ pt: 0 }}>
-          <Typography sx={{ mb: 1 }}>Name</Typography>
+        <DialogContent sx={{ pt: 1 }}>
+          <Typography variant="subtitle2" sx={{ mb: 1 }}>
+            Name
+          </Typography>
           <Controller
             name="name"
             control={control}
@@ -91,11 +90,12 @@ export default function CategoryDialog({
             )}
           />
         </DialogContent>
+        <Divider />
 
-        <DialogActions sx={{ mr: 2, mb: 2 }}>
+        <DialogActions sx={{ mr: 2, my: 1, gap: 2 }}>
           <Button
-            variant="contained"
-            sx={{ bgcolor: '#eee', color: '#444' }}
+            variant="text"
+            sx={{ bgcolor: '#eee', color: '#444', minWidth: '5rem', borderRadius: '10px' }}
             onClick={handleCloseModal}
           >
             Cancel
@@ -105,6 +105,8 @@ export default function CategoryDialog({
             type="submit"
             disabled={isDisabled}
             sx={{
+              minWidth: '5rem',
+              borderRadius: '10px',
               bgcolor: isDisabled ? '#bbdefb' : 'primary.main',
               color: '#fff',
               '&.Mui-disabled': {

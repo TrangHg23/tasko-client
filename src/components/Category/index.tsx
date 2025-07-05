@@ -97,9 +97,7 @@ export default function CategoryComponent() {
             sx={{ width: '100%' }}
           >
             <Stack direction="row">
-              <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mr: 1 }}>
-                Categories
-              </Typography>
+              <Typography sx={{ fontWeight: 'bold', mr: 1 }}>Categories</Typography>
               <ListItemIcon>
                 <Category />
               </ListItemIcon>
@@ -151,8 +149,8 @@ export default function CategoryComponent() {
               if (selectedCategory) handleEdit(selectedCategory);
             }}
           >
-            <Edit sx={{ mr: 1 }} fontSize="small" />
-            Edit
+            <Edit sx={{ mr: 1 }} />
+            <Typography>Edit</Typography>
           </MenuItem>
           <MenuItem
             sx={{ '&:hover': { color: 'secondary.main' } }}
@@ -160,7 +158,7 @@ export default function CategoryComponent() {
               if (selectedCategory) handleDelete(selectedCategory.id);
             }}
           >
-            <Delete sx={{ mr: 1 }} fontSize="small" />
+            <Delete sx={{ mr: 1 }} />
             Delete
           </MenuItem>
         </Menu>

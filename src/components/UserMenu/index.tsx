@@ -21,7 +21,7 @@ function UserMenu() {
         await logoutMutation.mutateAsync({ accessToken, refreshToken });
         enqueueSnackbar('Logout successfully!', { variant: 'success' });
       } catch (e) {
-        console.warn('Logout mutation throw caught in catch:', e);
+        console.error(e);
       }
     }
     navigate('/auth/login');
@@ -37,10 +37,10 @@ function UserMenu() {
   return (
     <Box sx={{ px: 2, py: 2, display: 'flex' }}>
       <Stack direction="row" alignItems="center" spacing={1}>
-        <Avatar sx={{ width: 32, height: 32, bgcolor: 'purple' }}>
-          {user?.name.charAt(0).toUpperCase()}
+        <Avatar sx={{ width: 28, height: 28, bgcolor: 'purple', textTransform: 'capitalize' }}>
+          {user?.name.charAt(0)}
         </Avatar>
-        <Typography variant="subtitle1" fontWeight={500}>
+        <Typography sx={{ textTransform: 'capitalize', fontWeight: 'bold' }}>
           {user?.name}
         </Typography>
       </Stack>

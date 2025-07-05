@@ -1,14 +1,26 @@
-import { useRouteError } from 'react-router';
-import { Box, Typography, Button, Paper, Container, Stack, useTheme } from '@mui/material';
+import { useNavigate, useRouteError } from 'react-router';
+import {
+  Box,
+  Typography,
+  Button,
+  Paper,
+  Container,
+  Stack,
+  useTheme,
+  useMediaQuery,
+} from '@mui/material';
 import { Warning as WarningIcon } from '@mui/icons-material';
 import BrandLogo from '@components/common/BrandLogo';
 
 const ErrorBoundary = () => {
   const error = useRouteError() as Error | undefined;
   const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+  const navigate = useNavigate();
 
   const handleRefresh = () => {
-    window.location.reload();
+    navigate(0);
   };
 
   return (
@@ -36,7 +48,7 @@ const ErrorBoundary = () => {
         <Paper
           elevation={3}
           sx={{
-            p: 4,
+            p: { xs: 2, md: 4 },
             borderRadius: 2,
             textAlign: 'center',
             borderLeft: `4px solid ${theme.palette.error.main}`,
@@ -44,16 +56,16 @@ const ErrorBoundary = () => {
         >
           <BrandLogo />
 
-          <Stack spacing={3} alignItems="center">
-            <WarningIcon color="error" sx={{ fontSize: 60 }} />
+          <Stack spacing={1} alignItems="center">
+            <WarningIcon color="error" sx={{ fontSize: 56 }} />
 
-            <Typography variant="h4" component="h1" color="error">
+            <Typography variant="h5" component="h1" color="error">
               Oops! Something went wrong
             </Typography>
 
             <Box
               sx={{
-                p: 2,
+                p: 3,
                 backgroundColor: theme.palette.grey[100],
                 borderRadius: 1,
                 textAlign: 'left',
@@ -63,7 +75,7 @@ const ErrorBoundary = () => {
                 whiteSpace: 'pre-wrap',
               }}
             >
-              <Typography variant="body1">
+              <Typography variant="subtitle1">
                 {error?.message || 'An unexpected error occurred.'}
               </Typography>
               {error?.stack && (
@@ -73,11 +85,32 @@ const ErrorBoundary = () => {
               )}
             </Box>
 
-            <Stack direction="row" spacing={2}>
-              <Button variant="contained" onClick={handleRefresh} color="error">
+            <Stack
+              direction={{ xs: 'column', md: 'row' }}
+              spacing={{ xs: 1, sm: 2, md: 3 }}
+              sx={{
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <Button
+                variant="contained"
+                onClick={handleRefresh}
+                color="error"
+                size={isMobile ? 'large' : 'medium'}
+                fullWidth
+              >
                 Refresh Page
               </Button>
-              <Button variant="outlined" href="/today" color="error">
+              <Button
+                variant="outlined"
+                href="/today"
+                color="error"
+                size={isMobile ? 'large' : 'medium'}
+                fullWidth
+              >
                 Go to Home
               </Button>
             </Stack>

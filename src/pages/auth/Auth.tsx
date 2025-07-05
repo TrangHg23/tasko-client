@@ -22,10 +22,10 @@ export default function Auth() {
     <Box
       sx={{
         width: '100%',
-        maxWidth: 500,
+        maxWidth: 480,
         minHeight: 400,
         mx: 'auto',
-        px: 2,
+        mt: { xs: 2, md: 3 },
       }}
     >
       <AnimatePresence mode="wait">
