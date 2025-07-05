@@ -31,15 +31,26 @@ function RegisterForm() {
           alignItems: 'center',
           justifyContent: 'center',
           textAlign: 'center',
-          mt: { xs: 1 },
-          mb: { xs: 2, sm: 3, md: 4 },
-          px: { xs: 2, sm: 0 },
+          mt: { xs: 0, md: '-16px' },
+          mb: { xs: 1, sm: 2, md: 3 },
         }}
       >
-        <Typography variant="h1" fontWeight="bold" gutterBottom>
+        <Typography
+          variant="h2"
+          gutterBottom
+          sx={{ fontSize: { xs: '1.5rem', sm: '1.625rem', md: '1.375rem' }, fontWeight: 600 }}
+        >
           Create new account
         </Typography>
-        <Typography variant="body1" color="textSecondary">
+
+        <Typography
+          variant="body1"
+          sx={{
+            fontSize: { xs: '1rem', md: '0.9375rem' },
+            lineHeight: 1.45,
+            color: 'text.secondary',
+          }}
+        >
           Start managing your tasks today.
         </Typography>
       </Box>
@@ -47,13 +58,13 @@ function RegisterForm() {
       <Box
         component="form"
         sx={{
-          width: { xs: '100%', sm: '80%', md: '85%', lg: '400px' },
+          width: { xs: '100%', sm: '80%', md: '85%', lg: '360px' },
           px: { xs: 2, sm: 3, md: 0 },
           mx: 'auto',
         }}
         onSubmit={handleSubmit(handleRegister)}
       >
-        <Stack spacing={{ xs: 1, md: 2 }}>
+        <Stack spacing={1}>
           <Controller
             name="name"
             control={control}
@@ -125,13 +136,21 @@ function RegisterForm() {
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ bgcolor: 'primary.main', mb: { xs: 1 }, borderRadius: 20, minWidth: 120 }}
+            sx={{
+              bgcolor: 'primary.main',
+              mb: { xs: 1 },
+              borderRadius: 20,
+              height: { xs: 44, sm: 48, md: 36 },
+              fontSize: { xs: '1rem', sm: '0.9375rem', md: '0.875rem' },
+              fontWeight: 600,
+              mt: 2,
+            }}
             disabled={registerMutation.isPending}
           >
             {registerMutation.isPending ? 'Signing up...' : 'Sign up'}
           </Button>
 
-          <Typography align="center" color="textSecondary">
+          <Typography align="center" color="textSecondary" sx={{ mt: { xs: 1, md: 2 } }}>
             {`Already have an account? `}
             <Box component={Link} to="/auth/login" sx={{ color: 'primary.main', fontWeight: 500 }}>
               Log in

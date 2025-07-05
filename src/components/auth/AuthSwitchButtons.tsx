@@ -11,7 +11,7 @@ const AuthSwitchButtons = () => {
   ];
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'right', p: 3 }}>
+    <Box sx={{ display: 'flex', justifyContent: 'right', p: 2 }}>
       <Stack direction="row" spacing={2}>
         {buttons.map(({ label, path }) => {
           const isActive = location.pathname === path;
@@ -30,7 +30,7 @@ const AuthSwitchButtons = () => {
                 fontWeight: 500,
                 mx: 1,
                 borderRadius: 20,
-                minWidth: 120,
+                minWidth: 90,
               }}
             >
               {label}

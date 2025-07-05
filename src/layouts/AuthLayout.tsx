@@ -13,7 +13,7 @@ const AuthLayout = () => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        p: 2,
+        p: 1,
       }}
     >
       <Box
@@ -40,7 +40,7 @@ const AuthLayout = () => {
         elevation={3}
         sx={{
           bgcolor: 'background.default',
-          maxWidth: 1000,
+          maxWidth: 800,
           width: '100%',
           display: 'flex',
           borderRadius: 5,
@@ -49,14 +49,14 @@ const AuthLayout = () => {
       >
         <Box
           sx={{
-            flex: { md: 1, lg: 1.5 },
+            flex: { xs: 0, md: 1.5 },
             position: 'relative',
             backgroundImage: `url(${authImg})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             display: { xs: 'none', md: 'block' },
             clipPath: 'polygon(0 0, 100% 0, 92% 100%, 0% 100%)',
-            m: 1,
+            m: { xs: 0, md: 1 },
             borderRadius: 5,
             overflow: 'hidden',
           }}
@@ -67,18 +67,23 @@ const AuthLayout = () => {
         <Box
           sx={{
             width: '100%',
-            p: 3,
+            mt: 1,
+            p: 2,
+            mr: 1,
             borderRadius: 2,
             textAlign: 'center',
-            height: { xs: 'auto', md: '75vh' },
-            minHeight: { xs: 400, md: 500 },
+            height: { xs: 'auto', md: '67.5vh' },
+            minHeight: { xs: 360, md: 460 },
             flex: 1,
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
           }}
         >
-          <BrandLogo />
+          <Box mt={{ xs: 1, md: 2 }}>
+            <BrandLogo />
+          </Box>
+
           <Outlet />
         </Box>
       </Paper>

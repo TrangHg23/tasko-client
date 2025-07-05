@@ -10,11 +10,11 @@ function Sidebar() {
       variant="permanent"
       anchor="left"
       sx={{
-        width: 300,
+        width: 280,
         backgroundColor: 'background.default',
         flexShrink: 0,
         [`& .MuiDrawer-paper`]: {
-          width: 300,
+          width: 280,
         },
       }}
     >
@@ -36,14 +36,7 @@ function Sidebar() {
             }}
           >
             <ListItemIcon>{item.icon}</ListItemIcon>
-            <ListItemText
-              primary={item.label}
-              slotProps={{
-                primary: {
-                  variant: 'body2',
-                },
-              }}
-            />
+            <ListItemText primary={item.label} />
           </ListItemButton>
         ))}
         <CategoryComponent />

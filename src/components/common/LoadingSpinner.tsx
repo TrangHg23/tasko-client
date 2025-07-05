@@ -1,27 +1,20 @@
-import { CircularProgress, Box, Typography, Stack } from '@mui/material';
+import { CircularProgress, Box, Typography } from '@mui/material';
 
 const LoadingSpinner = () => (
   <Box
     sx={{
       display: 'flex',
+      flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
-      minHeight: '100vh',
-      bgcolor: 'background.default',
+      minHeight: 300,
+      width: '100%',
     }}
   >
-    <Stack alignItems="center" spacing={3}>
-      <CircularProgress
-        size={60}
-        thickness={5}
-        sx={{
-          color: (theme) => theme.palette.primary.main,
-        }}
-      />
-      <Typography variant="h6" color="text.secondary">
-        Loading...
-      </Typography>
-    </Stack>
+    <CircularProgress thickness={5} />
+    <Typography mt={2} variant="subtitle1" color="text.secondary">
+      Loading...
+    </Typography>
   </Box>
 );
 

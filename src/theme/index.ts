@@ -10,46 +10,21 @@ const baseTheme = createTheme({
     warning: { main: '#FF9800' },
     error: { main: '#F44336' },
     background: { default: '#ffff', paper: '#f5f5f5', popup: '#fafafa' },
-    text: { primary: '#424242' },
   },
 
   typography: {
     fontFamily: `'Inter', 'Roboto', 'Helvetica', 'Arial', sans-serif`,
-    h1: { fontWeight: 700, fontSize: '2rem' },
-    h2: { fontWeight: 600, fontSize: '1.5rem' },
-    body1: { fontWeight: 400, fontSize: '1rem', lineHeight: 1.5 },
-    body2: { fontWeight: 500, fontSize: '0.875rem' },
-    button: { fontWeight: 600, textTransform: 'none' },
+    h1: { fontWeight: 700, fontSize: '1.75rem' },
+    h2: { fontWeight: 600, fontSize: '1.375rem' },
+    h6: { fontWeight: 600, fontSize: '1rem' },
+    body1: { fontWeight: 400, fontSize: '0.875rem', lineHeight: 1.4 },
+    body2: { fontWeight: 500, fontSize: '0.8125rem' },
+    button: { fontWeight: 600, fontSize: '0.8125rem', textTransform: 'none' },
   },
 });
 
 let theme = createTheme(baseTheme, {
   components: {
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          borderRadius: 20,
-          padding: baseTheme.spacing(1, 3),
-          fontWeight: 600,
-          textTransform: 'none',
-          minWidth: 120,
-        },
-        contained: {
-          boxShadow: 'none',
-          '&:hover': {
-            boxShadow: '0 2px 8px rgba(25, 118, 210, 0.5)',
-          },
-        },
-        outlined: {
-          padding: baseTheme.spacing(1, 3),
-        },
-        text: {
-          borderRadius: 20,
-          padding: baseTheme.spacing(1, 2),
-        },
-      },
-    },
-
     MuiAppBar: {
       styleOverrides: {
         root: {
@@ -62,9 +37,9 @@ let theme = createTheme(baseTheme, {
     MuiAlert: {
       styleOverrides: {
         root: {
-          borderRadius: 12,
-          padding: baseTheme.spacing(1.5),
-          fontWeight: 500,
+          borderRadius: 8,
+          padding: baseTheme.spacing(1),
+          fontWeight: 400,
           alignItems: 'center',
         },
         standardSuccess: {
@@ -76,7 +51,30 @@ let theme = createTheme(baseTheme, {
           color: '#D32F2F',
         },
         icon: {
-          marginRight: baseTheme.spacing(1),
+          marginRight: baseTheme.spacing(0.5),
+        },
+      },
+    },
+
+    MuiSvgIcon: {
+      styleOverrides: {
+        root: {
+          fontSize: 20,
+        },
+      },
+    },
+    MuiListItemIcon: {
+      styleOverrides: {
+        root: {
+          minWidth: 24,
+          marginRight: 8,
+        },
+      },
+    },
+    MuiListItemText: {
+      styleOverrides: {
+        root: {
+          margin: 0,
         },
       },
     },

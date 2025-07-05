@@ -30,15 +30,25 @@ function LoginForm() {
           alignItems: 'center',
           justifyContent: 'center',
           textAlign: 'center',
-          mt: { xs: 1, md: 3 },
+          mt: 1,
           mb: { xs: 2, sm: 3, md: 4 },
-          px: { xs: 2, sm: 0 },
         }}
       >
-        <Typography variant="h1" fontWeight="bold" gutterBottom>
+        <Typography
+          variant="h2"
+          gutterBottom
+          sx={{ fontSize: { xs: '1.5rem', sm: '1.625rem', md: '1.375rem' }, fontWeight: 600 }}
+        >
           Welcome to Tasko
         </Typography>
-        <Typography variant="body1" color="textSecondary">
+        <Typography
+          variant="body1"
+          sx={{
+            fontSize: { xs: '1rem', md: '0.9375rem' },
+            lineHeight: 1.45,
+            color: 'text.secondary',
+          }}
+        >
           Organize and get things done.
         </Typography>
       </Box>
@@ -46,13 +56,12 @@ function LoginForm() {
       <Box
         component="form"
         sx={{
-          width: { xs: '100%', sm: '85%', md: '80%', lg: '400px' },
-          px: { xs: 2, sm: 3 },
+          width: { xs: '100%', sm: '85%', md: '80%', lg: '360px' },
           mx: 'auto',
         }}
         onSubmit={handleSubmit(handleLogin)}
       >
-        <Stack spacing={{ xs: 1, md: 2 }}>
+        <Stack spacing={1}>
           <Controller
             name="email"
             control={control}
@@ -106,13 +115,21 @@ function LoginForm() {
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ bgcolor: 'primary.main', mb: { xs: 1 }, borderRadius: 20 }}
+            sx={{
+              bgcolor: 'primary.main',
+              mb: { xs: 1 },
+              borderRadius: 20,
+              height: { xs: 44, sm: 48, md: 36 },
+              fontSize: { xs: '1rem', sm: '0.9375rem', md: '0.875rem' },
+              fontWeight: 600,
+              mt: 2,
+            }}
             disabled={loginMutation.isPending}
           >
             {loginMutation.isPending ? 'Logging in...' : 'Login'}
           </Button>
 
-          <Typography align="center" color="textSecondary">
+          <Typography align="center" color="textSecondary" sx={{ mt: { xs: 1, md: 2 } }}>
             {`Don't have an account? `}
             <Box component={Link} to="/auth/signup" sx={{ color: 'primary.main', fontWeight: 500 }}>
               Sign up
