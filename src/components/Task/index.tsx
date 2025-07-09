@@ -23,7 +23,7 @@ function TaskItem({ ...task }: ITask) {
           transition={{ duration: 0.3 }}
         >
           <div>
-            <ListItem sx={{ p: 0.5 }}>
+            <ListItem sx={{ py: 0.5 }}>
               <Checkbox
                 icon={<RadioButtonUnchecked />}
                 checked={checked}
