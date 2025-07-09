@@ -78,6 +78,71 @@ let theme = createTheme(baseTheme, {
         },
       },
     },
+
+    MuiTextField: {
+      defaultProps: {
+        size: 'small',
+        fullWidth: true,
+      },
+      styleOverrides: {
+        root: {
+          '& input': {
+            padding: '0.25rem',
+            fontSize: '0.75rem',
+          },
+          '& .MuiInputBase-root': {
+            padding: 0,
+            fontSize: '0.75rem',
+          },
+          '& .MuiSvgIcon-root': {
+            fontSize: '18px',
+          },
+          '& .MuiIconButton-root': {
+            padding: 0,
+            marginRight: '0.5rem',
+          },
+        },
+      },
+    },
+    MuiDatePicker: {
+      defaultProps: {
+        slotProps: {
+          textField: {
+            placeholder: 'Date',
+            size: 'small',
+            fullWidth: true,
+          },
+          popper: {
+            modifiers: [
+              {
+                name: 'offset',
+                options: {
+                  offset: [0, 4],
+                },
+              },
+            ],
+            sx: {
+              '& .MuiDateCalendar-root': {
+                width: 270,
+                height: 260,
+                fontSize: '0.75rem',
+              },
+              '& .MuiDayCalendar-day': {
+                width: 28,
+                height: 28,
+                fontSize: '0.75rem',
+              },
+              '& .MuiPickersCalendarHeader-root': {
+                fontSize: '0.75rem',
+              },
+              '& .MuiSvgIcon-root': {
+                fontSize: '1rem',
+              },
+            },
+          },
+        },
+      },
+    },
   },
 });
 
