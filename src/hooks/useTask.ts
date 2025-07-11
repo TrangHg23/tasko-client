@@ -24,3 +24,16 @@ export const addTask = () => {
     },
   });
 };
+
+export const usePatchTask = () => {
+  return useMutation({
+    mutationKey: ['patch-task'],
+    mutationFn: taskAPI.updatePartialTask,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+    },
+    onError: () => {
+      enqueueSnackbar('Faild to update task', { variant: 'error' });
+    },
+  });
+};

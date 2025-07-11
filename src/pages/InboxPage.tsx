@@ -7,7 +7,8 @@ import { Box, Container, IconButton, List, Stack, Typography } from '@mui/materi
 import { useState } from 'react';
 
 function InboxPage() {
-  const { data: todayTasks } = useTasks({ inbox: true });
+  const { data: inboxTasks } = useTasks({ inbox: true });
+
   const [open, setOpen] = useState(false);
   const { mutateAsync: mutateAsyncAdd, isPending: isPendingAdd } = addTask();
   const handleSubmit = async (data: TaskRequest) => {
@@ -41,7 +42,7 @@ function InboxPage() {
         <Typography variant="h1">Inbox</Typography>
         <div>
           <List component="div">
-            {todayTasks?.map((task) => (
+            {inboxTasks?.map((task) => (
               <TaskItem key={task.id} {...task} />
             ))}
           </List>
