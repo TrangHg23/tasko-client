@@ -1,16 +1,36 @@
-import type { ITask } from '@app-types/task';
-import { CheckCircle, RadioButtonUnchecked } from '@mui/icons-material';
-import { Checkbox, Divider, ListItem, Typography } from '@mui/material';
+import type { ITask, PatchTaskRequest } from '@app-types/task';
+import {
+  Check,
+  CheckCircle,
+  DeleteOutline,
+  EditOutlined,
+  RadioButtonUnchecked,
+} from '@mui/icons-material';
+import { Box, Checkbox, Divider, IconButton, ListItem, Stack, Typography } from '@mui/material';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
+import { PRIORITY_META } from '@app-types/enum';
+import { usePatchTask } from '@hooks/useTask';
+import { enqueueSnackbar } from 'notistack';
 
 function TaskItem({ ...task }: ITask) {
   const [checked, setChecked] = useState(false);
   const [visible, setVisible] = useState(true);
+  const { mutateAsync } = usePatchTask();
 
-  const handleChange = () => {
-    setChecked(true);
-    setTimeout(() => setVisible(false), 300);
+  const handleChange = async () => {
+    const completeRequest: PatchTaskRequest = {
+      id: task.id,
+      task: { isCompleted: true },
+    };
+    try {
+      await mutateAsync(completeRequest);
+      setChecked(true);
+      setTimeout(() => setVisible(false), 300);
+      enqueueSnackbar('Task completed', { variant: 'success' });
+    } catch (e) {
+      console.error('Error: ' + e);
+    }
   };
 
   return (
@@ -25,17 +45,75 @@ function TaskItem({ ...task }: ITask) {
           <div>
             <ListItem sx={{ py: 0.5 }}>
               <Checkbox
-                icon={<RadioButtonUnchecked />}
                 checked={checked}
-                checkedIcon={<CheckCircle sx={{ color: 'success.main' }} />}
                 onChange={handleChange}
+                sx={{
+                  position: 'relative',
+                  '&:hover .check-icon': {
+                    opacity: 1,
+                  },
+                }}
+                icon={
+                  <Box component="span" sx={{ display: 'inline-flex' }}>
+                    <RadioButtonUnchecked
+                      className="circle-icon"
+                      sx={{ color: PRIORITY_META[task.priority].color }}
+                    />
+                    <Check
+                      className="check-icon"
+                      sx={{
+                        color: PRIORITY_META[task.priority].color,
+                        transform: 'scale(0.7)',
+                        position: 'absolute',
+                        opacity: 0,
+                        transition: 'opacity 0.2s',
+                      }}
+                    />
+                  </Box>
+                }
+                checkedIcon={<CheckCircle sx={{ color: PRIORITY_META[task.priority].color }} />}
+                disableRipple
                 slotProps={{
                   input: {
                     'aria-label': 'controlled',
                   },
                 }}
               />
-              <Typography>{task.title}</Typography>
+
+              <Stack
+                direction="row"
+                sx={{
+                  justifyContent: 'space-between',
+                  width: '100%',
+                  '&:hover .hover-buttons': {
+                    opacity: 1,
+                    visibility: 'visible',
+                  },
+                }}
+              >
+                <Stack spacing={0.2} justifyContent={'center'}>
+                  <Typography>{task.title}</Typography>
+                  <Typography variant="body2">{task.description}</Typography>
+                </Stack>
+                <Stack
+                  direction="row"
+                  className="hover-buttons"
+                  sx={{
+                    opacity: 0,
+                    visibility: 'hidden',
+                    transition: 'opacity 0.2s ease',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <IconButton sx={{ padding: '0.25rem' }}>
+                    <EditOutlined fontSize="small" />
+                  </IconButton>
+                  <IconButton sx={{ padding: '0.25rem' }}>
+                    <DeleteOutline fontSize="small" />
+                  </IconButton>
+                </Stack>
+              </Stack>
             </ListItem>
             <Divider />
           </div>

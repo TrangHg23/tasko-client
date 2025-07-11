@@ -37,3 +37,16 @@ export interface TaskRequest {
   priority: PriorityLevel;
   categoryId?: string;
 }
+
+export type PatchTaskDto = {
+  title?: string;
+  description?: string;
+  dueDate?: string;
+  priority?: number;
+  isCompleted?: boolean;
+};
+
+export interface PatchTaskRequest {
+  id: string;
+  task: PatchTaskDto;
+}
