@@ -1,4 +1,4 @@
-import type { TaskFormValues, TaskRequest } from '@app-types/task';
+import type { SelectedTaskForm, TaskFormValues, TaskRequest } from '@app-types/task';
 import { Clear, Flag } from '@mui/icons-material';
 import {
   Box,
@@ -16,24 +16,35 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { Controller, useForm } from 'react-hook-form';
 import { format, startOfToday } from 'date-fns';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { PRIORITY_META, PriorityLevel } from '@app-types/enum';
 
-type TaskEditor = {
+type TaskEditorProps = {
+  initialData?: SelectedTaskForm;
   onClose: () => void;
   onSubmit: (data: TaskRequest) => void;
   isPending?: boolean;
 };
 
-function TaskEditor({ onClose, onSubmit, isPending }: TaskEditor) {
+function TaskEditor({ initialData, onClose, onSubmit, isPending }: TaskEditorProps) {
+  const initialValues = {
+    title: '',
+    description: '',
+    dueDate: null,
+    priority: PriorityLevel.LOW,
+  };
+
   const { control, handleSubmit, watch, reset } = useForm<TaskFormValues>({
-    defaultValues: {
-      title: '',
-      description: '',
-      dueDate: null,
-      priority: PriorityLevel.LOW,
-    },
+    defaultValues: initialValues,
   });
+
+  useEffect(() => {
+    if (initialData) {
+      reset({ ...initialData });
+    } else {
+      reset(initialValues);
+    }
+  }, [initialData]);
 
   const isValid = !!watch('title')?.trim();
   const isDisabled = !isValid || isPending;
@@ -68,7 +79,7 @@ function TaskEditor({ onClose, onSubmit, isPending }: TaskEditor) {
           mx: 'auto',
         }}
       >
-        <Box component="form" sx={{ p: 1 }} onSubmit={handleSubmit(handleSubmitTaskData)}>
+        <Box component="form" sx={{ p: 1.5 }} onSubmit={handleSubmit(handleSubmitTaskData)}>
           <Stack spacing={0.2}>
             <Controller
               name="title"
@@ -115,7 +126,7 @@ function TaskEditor({ onClose, onSubmit, isPending }: TaskEditor) {
               )}
             />
 
-            <Stack direction="row" spacing={1} sx={{ pb: 1.2, pl: '0.25rem' }}>
+            <Stack direction="row" spacing={1} sx={{ pb: 1.2 }}>
               <Controller
                 control={control}
                 name="dueDate"
@@ -127,7 +138,24 @@ function TaskEditor({ onClose, onSubmit, isPending }: TaskEditor) {
                     value={field.value}
                     format="d MMM"
                     minDate={startOfToday()}
-                    sx={{ width: 75 }}
+                    sx={{
+                      width: 75,
+                      '& input': {
+                        padding: '0.25rem',
+                        fontSize: '0.75rem',
+                      },
+                      '& .MuiInputBase-root': {
+                        padding: 0,
+                        fontSize: '0.75rem',
+                      },
+                      '& .MuiSvgIcon-root': {
+                        fontSize: '18px',
+                      },
+                      '& .MuiIconButton-root': {
+                        padding: 0,
+                        marginRight: '0.5rem',
+                      },
+                    }}
                     slotProps={{
                       textField: {
                         size: 'small',
@@ -188,7 +216,7 @@ function TaskEditor({ onClose, onSubmit, isPending }: TaskEditor) {
                           }}
                           sx={{
                             fontSize: '0.75rem',
-                            '& button': { p: 0 },
+
                             '&.Mui-selected': { backgroundColor: '#d1eaff', color: 'primary.main' },
                           }}
                         >

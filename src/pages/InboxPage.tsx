@@ -1,29 +1,45 @@
-import type { TaskRequest } from '@app-types/task';
+import type { SelectedTaskForm, TaskRequest } from '@app-types/task';
 import TaskItem from '@components/Task';
 import TaskEditor from '@components/Task/TaskEditor';
-import { addTask, useTasks } from '@hooks/useTask';
+import { useAddTask, useTasks, useUpdateTask } from '@hooks/useTask';
 import { Add } from '@mui/icons-material';
 import { Box, Container, IconButton, List, Stack, Typography } from '@mui/material';
 import { useState } from 'react';
 
 function InboxPage() {
   const { data: inboxTasks } = useTasks({ inbox: true });
-
+  const [selectedTask, setSelectedTask] = useState<SelectedTaskForm | undefined>(undefined);
   const [open, setOpen] = useState(false);
-  const { mutateAsync: mutateAsyncAdd, isPending: isPendingAdd } = addTask();
+  const { mutateAsync: mutateAsyncAdd, isPending: isPendingAdd } = useAddTask();
+  const { mutateAsync: mutateAsyncUpdate, isPending: isPendingUpdate } = useUpdateTask();
+
   const handleSubmit = async (data: TaskRequest) => {
     try {
-      await mutateAsyncAdd(data);
+      if (selectedTask) {
+        const updateData = {
+          id: selectedTask.id,
+          task: data,
+        };
+        await mutateAsyncUpdate(updateData);
+        setOpen(false);
+      } else {
+        await mutateAsyncAdd(data);
+      }
     } catch (e) {
       console.error('Error: ', e);
     }
   };
 
   const handleAddTask = () => {
+    setSelectedTask(undefined);
     setOpen(true);
   };
 
   const handleCloseEditor = () => setOpen(false);
+  const handleEdit = (data: SelectedTaskForm) => {
+    setOpen(true);
+    setSelectedTask(data);
+  };
 
   return (
     <div>
@@ -43,7 +59,7 @@ function InboxPage() {
         <div>
           <List component="div">
             {inboxTasks?.map((task) => (
-              <TaskItem key={task.id} {...task} />
+              <TaskItem key={task.id} task={task} onEdit={handleEdit} />
             ))}
           </List>
         </div>
@@ -56,9 +72,10 @@ function InboxPage() {
         <Box sx={{ mt: -4 }}>
           {open && (
             <TaskEditor
+              initialData={selectedTask}
               onClose={() => handleCloseEditor()}
               onSubmit={handleSubmit}
-              isPending={isPendingAdd}
+              isPending={isPendingAdd || isPendingUpdate}
             />
           )}
         </Box>

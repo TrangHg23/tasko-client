@@ -1,4 +1,9 @@
-import type { GetTasksParams, PatchTaskRequest, TaskRequest } from '@app-types/task';
+import type {
+  GetTasksParams,
+  PatchTaskRequest,
+  TaskRequest,
+  UpdateTaskRequest,
+} from '@app-types/task';
 import apiClient from '@lib/axios';
 
 export const taskAPI = {
@@ -14,6 +19,11 @@ export const taskAPI = {
 
   updatePartialTask: async (data: PatchTaskRequest) => {
     const res = await apiClient.patch(`/tasks/${data.id}`, data.task);
+    return res.data;
+  },
+
+  updateTask: async (data: UpdateTaskRequest) => {
+    const res = await apiClient.put(`tasks/${data.id}`, data.task);
     return res.data;
   },
 };

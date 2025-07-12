@@ -78,32 +78,6 @@ let theme = createTheme(baseTheme, {
         },
       },
     },
-
-    MuiTextField: {
-      defaultProps: {
-        size: 'small',
-        fullWidth: true,
-      },
-      styleOverrides: {
-        root: {
-          '& input': {
-            padding: '0.25rem',
-            fontSize: '0.75rem',
-          },
-          '& .MuiInputBase-root': {
-            padding: 0,
-            fontSize: '0.75rem',
-          },
-          '& .MuiSvgIcon-root': {
-            fontSize: '18px',
-          },
-          '& .MuiIconButton-root': {
-            padding: 0,
-            marginRight: '0.5rem',
-          },
-        },
-      },
-    },
     MuiDatePicker: {
       defaultProps: {
         slotProps: {

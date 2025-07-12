@@ -11,7 +11,7 @@ export const useTasks = (params: GetTasksParams) => {
   });
 };
 
-export const addTask = () => {
+export const useAddTask = () => {
   return useMutation({
     mutationKey: ['add-task'],
     mutationFn: taskAPI.createTask,
@@ -29,6 +29,19 @@ export const usePatchTask = () => {
   return useMutation({
     mutationKey: ['patch-task'],
     mutationFn: taskAPI.updatePartialTask,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+    },
+    onError: () => {
+      enqueueSnackbar('Faild to update task', { variant: 'error' });
+    },
+  });
+};
+
+export const useUpdateTask = () => {
+  return useMutation({
+    mutationKey: ['update-task'],
+    mutationFn: taskAPI.updateTask,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['tasks'] });
     },
