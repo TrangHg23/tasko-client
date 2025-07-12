@@ -24,7 +24,7 @@ export interface GetTasksParams {
 
 export interface TaskFormValues {
   title: string;
-  description: string;
+  description?: string;
   dueDate?: Date | null;
   priority: PriorityLevel;
   categoryId?: string;
@@ -32,7 +32,7 @@ export interface TaskFormValues {
 
 export interface TaskRequest {
   title: string;
-  description: string;
+  description?: string;
   dueDate?: string | null;
   priority: PriorityLevel;
   categoryId?: string;
@@ -49,4 +49,11 @@ export type PatchTaskDto = {
 export interface PatchTaskRequest {
   id: string;
   task: PatchTaskDto;
+}
+
+export type SelectedTaskForm = TaskFormValues & { id: string };
+
+export interface UpdateTaskRequest {
+  id: string;
+  task: TaskRequest;
 }

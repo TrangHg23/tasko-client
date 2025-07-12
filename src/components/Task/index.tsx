@@ -1,4 +1,4 @@
-import type { ITask, PatchTaskRequest } from '@app-types/task';
+import type { ITask, PatchTaskRequest, SelectedTaskForm } from '@app-types/task';
 import {
   Check,
   CheckCircle,
@@ -12,8 +12,14 @@ import { useState } from 'react';
 import { PRIORITY_META } from '@app-types/enum';
 import { usePatchTask } from '@hooks/useTask';
 import { enqueueSnackbar } from 'notistack';
+import { mapTaskToForm } from 'src/utils/task';
 
-function TaskItem({ ...task }: ITask) {
+type TaskItemProps = {
+  task: ITask;
+  onEdit: (task: SelectedTaskForm) => void;
+};
+
+function TaskItem({ task, onEdit }: TaskItemProps) {
   const [checked, setChecked] = useState(false);
   const [visible, setVisible] = useState(true);
   const { mutateAsync } = usePatchTask();
@@ -106,7 +112,10 @@ function TaskItem({ ...task }: ITask) {
                     alignItems: 'center',
                   }}
                 >
-                  <IconButton sx={{ padding: '0.25rem' }}>
+                  <IconButton
+                    sx={{ padding: '0.25rem' }}
+                    onClick={() => onEdit(mapTaskToForm(task))}
+                  >
                     <EditOutlined fontSize="small" />
                   </IconButton>
                   <IconButton sx={{ padding: '0.25rem' }}>
