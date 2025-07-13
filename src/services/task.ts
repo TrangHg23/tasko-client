@@ -26,4 +26,8 @@ export const taskAPI = {
     const res = await apiClient.put(`tasks/${data.id}`, data.task);
     return res.data;
   },
+
+  deleteTask: async (id: string) => {
+    return await apiClient.delete(`tasks/${id}`);
+  },
 };

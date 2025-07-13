@@ -50,3 +50,16 @@ export const useUpdateTask = () => {
     },
   });
 };
+
+export const useDeleteTask = () => {
+  return useMutation({
+    mutationKey: ['delete-task'],
+    mutationFn: taskAPI.deleteTask,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+    },
+    onError: () => {
+      enqueueSnackbar('Faild to delete task', { variant: 'error' });
+    },
+  });
+};
