@@ -10,9 +10,10 @@ import { Box, Checkbox, Divider, IconButton, ListItem, Stack, Typography } from 
 import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
 import { PRIORITY_META } from '@app-types/enum';
-import { usePatchTask } from '@hooks/useTask';
+import { useDeleteTask, usePatchTask } from '@hooks/useTask';
 import { enqueueSnackbar } from 'notistack';
 import { mapTaskToForm } from 'src/utils/task';
+import ConfirmDeleteDialog from './ConfirmDeleteDialog';
 
 type TaskItemProps = {
   task: ITask;
@@ -22,7 +23,9 @@ type TaskItemProps = {
 function TaskItem({ task, onEdit }: TaskItemProps) {
   const [checked, setChecked] = useState(false);
   const [visible, setVisible] = useState(true);
+  const [openDeleteConfirm, setOpenDeleteConfirm] = useState(false);
   const { mutateAsync } = usePatchTask();
+  const { mutateAsync: mutateAsyncDelete } = useDeleteTask();
 
   const handleChange = async () => {
     const completeRequest: PatchTaskRequest = {
@@ -35,7 +38,15 @@ function TaskItem({ task, onEdit }: TaskItemProps) {
       setTimeout(() => setVisible(false), 300);
       enqueueSnackbar('Task completed', { variant: 'success' });
     } catch (e) {
-      console.error('Error: ' + e);
+      console.error('Error: ', e);
+    }
+  };
+
+  const handleDeleteTask = async (id: string) => {
+    try {
+      await mutateAsyncDelete(id);
+    } catch (e) {
+      console.error('Error: ', e);
     }
   };
 
@@ -49,7 +60,7 @@ function TaskItem({ task, onEdit }: TaskItemProps) {
           transition={{ duration: 0.3 }}
         >
           <div>
-            <ListItem sx={{ py: 0.5 }}>
+            <ListItem sx={{ py: 0.5, pl: 0 }}>
               <Checkbox
                 checked={checked}
                 onChange={handleChange}
@@ -118,9 +129,18 @@ function TaskItem({ task, onEdit }: TaskItemProps) {
                   >
                     <EditOutlined fontSize="small" />
                   </IconButton>
-                  <IconButton sx={{ padding: '0.25rem' }}>
+                  <IconButton
+                    sx={{ padding: '0.25rem' }}
+                    onClick={() => setOpenDeleteConfirm(true)}
+                  >
                     <DeleteOutline fontSize="small" />
                   </IconButton>
+                  <ConfirmDeleteDialog
+                    open={openDeleteConfirm}
+                    handleClose={() => setOpenDeleteConfirm(false)}
+                    onConfirm={() => handleDeleteTask(task.id)}
+                    taskTitle={task.title}
+                  />
                 </Stack>
               </Stack>
             </ListItem>
