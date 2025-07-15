@@ -47,12 +47,9 @@ function InboxPage() {
         disableGutters
         maxWidth={false}
         sx={{
-          mt: 6,
-          maxWidth: '800px',
           width: '100%',
           mx: 'auto',
           position: 'relative',
-          mb: '300px',
         }}
       >
         <Typography variant="h1">Inbox</Typography>

@@ -1,47 +1,42 @@
 import CategoryComponent from '@components/Category';
 import UserMenu from '@components/UserMenu';
-import { Drawer, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import { Box, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import { NavLink } from 'react-router';
 import { navItems } from 'src/constants/navItems';
 
-function Sidebar() {
+type SidebarProps = {
+  handleClose: () => void;
+  isMobile: boolean;
+};
+function Sidebar({ handleClose, isMobile }: SidebarProps) {
   return (
-    <Drawer
-      variant="permanent"
-      anchor="left"
-      sx={{
-        width: 280,
-        backgroundColor: 'background.default',
-        flexShrink: 0,
-        [`& .MuiDrawer-paper`]: {
-          width: 280,
-        },
-      }}
-    >
-      <UserMenu />
+    <>
+      <Box sx={{ height: '100%', width: '100%' }}>
+        <UserMenu />
 
-      <List sx={{ mx: 2 }}>
-        {navItems.map((item) => (
-          <ListItemButton
-            key={item.label}
-            component={NavLink}
-            to={item.to}
-            sx={{
-              borderRadius: 2,
-              '&.active': {
-                backgroundColor: 'primary.main',
-                color: 'white',
-                '& .MuiListItemIcon-root': { color: 'white' },
-              },
-            }}
-          >
-            <ListItemIcon>{item.icon}</ListItemIcon>
-            <ListItemText primary={item.label} />
-          </ListItemButton>
-        ))}
-        <CategoryComponent />
-      </List>
-    </Drawer>
+        <List>
+          {navItems.map((item) => (
+            <ListItemButton
+              key={item.label}
+              component={NavLink}
+              to={item.to}
+              onClick={isMobile ? handleClose : undefined}
+              sx={{
+                '&.active': {
+                  backgroundColor: 'primary.main',
+                  color: 'white',
+                  '& .MuiListItemIcon-root': { color: 'white' },
+                },
+              }}
+            >
+              <ListItemIcon>{item.icon}</ListItemIcon>
+              <ListItemText primary={item.label} />
+            </ListItemButton>
+          ))}
+          <CategoryComponent />
+        </List>
+      </Box>
+    </>
   );
 }
 
