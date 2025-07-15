@@ -63,6 +63,19 @@ let theme = createTheme(baseTheme, {
         },
       },
     },
+
+    MuiListItemButton: {
+      styleOverrides: {
+        root: {
+          marginLeft: '0.625rem',
+          borderRadius: '0.5rem',
+          minHeight: 32,
+        },
+      },
+      defaultProps: {
+        disableRipple: true,
+      },
+    },
     MuiListItemIcon: {
       styleOverrides: {
         root: {
