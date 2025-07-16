@@ -1,5 +1,6 @@
 import CategoryComponent from '@components/Category';
 import UserMenu from '@components/UserMenu';
+import { useCountTask } from '@hooks/useTask';
 import { Box, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import { NavLink } from 'react-router';
 import { navItems } from 'src/constants/navItems';
@@ -9,6 +10,7 @@ type SidebarProps = {
   isMobile: boolean;
 };
 function Sidebar({ handleClose, isMobile }: SidebarProps) {
+  const { data: taskCount } = useCountTask();
   return (
     <>
       <Box sx={{ height: '100%', width: '100%' }}>
@@ -30,7 +32,13 @@ function Sidebar({ handleClose, isMobile }: SidebarProps) {
               }}
             >
               <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.label} />
+              <ListItemText
+                primary={
+                  item.showCount && taskCount?.[item.key] > 0
+                    ? `${item.label} (${taskCount[item.key]})`
+                    : item.label
+                }
+              />
             </ListItemButton>
           ))}
           <CategoryComponent />

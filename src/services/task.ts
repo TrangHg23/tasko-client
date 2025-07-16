@@ -30,4 +30,9 @@ export const taskAPI = {
   deleteTask: async (id: string) => {
     return await apiClient.delete(`tasks/${id}`);
   },
+
+  countTask: async () => {
+    const res = await apiClient.get(`tasks/count`);
+    return res.data;
+  },
 };

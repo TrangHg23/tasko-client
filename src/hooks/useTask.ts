@@ -11,12 +11,19 @@ export const useTasks = (params: GetTasksParams) => {
   });
 };
 
+export const useCountTask = () => {
+  return useQuery({
+    queryKey: ['taskCount'],
+    queryFn: taskAPI.countTask,
+  });
+};
+
 export const useAddTask = () => {
   return useMutation({
-    mutationKey: ['add-task'],
+    mutationKey: ['addTask'],
     mutationFn: taskAPI.createTask,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+      ['tasks', 'taskCount'].forEach((key) => queryClient.invalidateQueries({ queryKey: [key] }));
       enqueueSnackbar('Task added!', { variant: 'success' });
     },
     onError: () => {
@@ -27,10 +34,10 @@ export const useAddTask = () => {
 
 export const usePatchTask = () => {
   return useMutation({
-    mutationKey: ['patch-task'],
+    mutationKey: ['patchTask'],
     mutationFn: taskAPI.updatePartialTask,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+      ['tasks', 'taskCount'].forEach((key) => queryClient.invalidateQueries({ queryKey: [key] }));
     },
     onError: () => {
       enqueueSnackbar('Faild to update task', { variant: 'error' });
@@ -40,10 +47,10 @@ export const usePatchTask = () => {
 
 export const useUpdateTask = () => {
   return useMutation({
-    mutationKey: ['update-task'],
+    mutationKey: ['updateTask'],
     mutationFn: taskAPI.updateTask,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+      ['tasks', 'taskCount'].forEach((key) => queryClient.invalidateQueries({ queryKey: [key] }));
     },
     onError: () => {
       enqueueSnackbar('Faild to update task', { variant: 'error' });
@@ -53,10 +60,10 @@ export const useUpdateTask = () => {
 
 export const useDeleteTask = () => {
   return useMutation({
-    mutationKey: ['delete-task'],
+    mutationKey: ['deleteTask'],
     mutationFn: taskAPI.deleteTask,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+      ['tasks', 'taskCount'].forEach((key) => queryClient.invalidateQueries({ queryKey: [key] }));
     },
     onError: () => {
       enqueueSnackbar('Faild to delete task', { variant: 'error' });
