@@ -7,8 +7,8 @@ import {
 import {
   Add,
   Category,
-  Delete,
-  Edit,
+  DeleteOutline,
+  EditOutlined,
   ExpandLess,
   ExpandMore,
   MoreHoriz,
@@ -25,6 +25,8 @@ import {
   MenuItem,
   Stack,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import { useState } from 'react';
 import CategoryDialog from './CategoryDialog';
@@ -33,7 +35,8 @@ import type { CategoryRequest, ICategory } from '@app-types/category';
 export default function CategoryComponent() {
   const [open, setOpen] = useState(true);
   const handleExpand = () => setOpen(!open);
-
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const { data: categories = [] } = useCategories();
 
   const { mutateAsync: mutateAsyncAdd, isPending: isPendingAdd } = useAddCategory();
@@ -89,7 +92,7 @@ export default function CategoryComponent() {
   return (
     <Box sx={{ mt: 5 }}>
       <div>
-        <ListItemButton disableRipple>
+        <ListItemButton sx={{ py: 0.5, pl: 3 }}>
           <Stack
             direction="row"
             alignItems="center"
@@ -117,11 +120,13 @@ export default function CategoryComponent() {
           <List component="div" disablePadding>
             {categories?.map((category) => (
               <div key={category.id}>
-                <ListItemButton sx={{ pl: 4 }} key={category.id} disableRipple>
+                <ListItemButton sx={{ pl: 3, py: { xs: 1, md: 0.5 } }} key={category.id}>
                   <ListItemText primary={category.name} />
                   <IconButton
+                    size="small"
                     onClick={(e) => handleOpenMenu(e, category)}
                     sx={{
+                      p: 0.5,
                       color: selectedCategory?.id === category.id ? 'primary.main' : 'gray',
                     }}
                   >
@@ -137,7 +142,7 @@ export default function CategoryComponent() {
           id="option-menu"
           anchorEl={anchorEl}
           anchorOrigin={{
-            vertical: 'top',
+            vertical: isMobile ? 'bottom' : 'top',
             horizontal: 'right',
           }}
           open={openOption}
@@ -149,8 +154,8 @@ export default function CategoryComponent() {
               if (selectedCategory) handleEdit(selectedCategory);
             }}
           >
-            <Edit sx={{ mr: 1 }} />
-            <Typography>Edit</Typography>
+            <EditOutlined sx={{ mr: 1 }} />
+            <Typography variant="body2">Edit</Typography>
           </MenuItem>
           <MenuItem
             sx={{ '&:hover': { color: 'secondary.main' } }}
@@ -158,8 +163,8 @@ export default function CategoryComponent() {
               if (selectedCategory) handleDelete(selectedCategory.id);
             }}
           >
-            <Delete sx={{ mr: 1 }} />
-            Delete
+            <DeleteOutline sx={{ mr: 1 }} />
+            <Typography variant="body2">Delete</Typography>
           </MenuItem>
         </Menu>
 

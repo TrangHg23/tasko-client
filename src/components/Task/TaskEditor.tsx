@@ -216,7 +216,6 @@ function TaskEditor({ initialData, onClose, onSubmit, isPending }: TaskEditorPro
                           }}
                           sx={{
                             fontSize: '0.75rem',
-
                             '&.Mui-selected': { backgroundColor: '#d1eaff', color: 'primary.main' },
                           }}
                         >

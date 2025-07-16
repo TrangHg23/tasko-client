@@ -59,12 +59,20 @@ function TaskItem({ task, onEdit }: TaskItemProps) {
           exit={{ opacity: 0, height: 0, margin: 0, padding: 0 }}
           transition={{ duration: 0.3 }}
         >
-          <div>
+          <Box
+            sx={{
+              '&:hover': {
+                backgroundColor: 'rgba(178, 226, 255, 0.18)',
+              },
+            }}
+          >
             <ListItem sx={{ py: 0.5, pl: 0 }}>
               <Checkbox
                 checked={checked}
                 onChange={handleChange}
                 sx={{
+                  transform: { xs: 'scale(1.3)', md: 'scale(1)' },
+                  padding: 0.5,
                   position: 'relative',
                   '&:hover .check-icon': {
                     opacity: 1,
@@ -102,6 +110,8 @@ function TaskItem({ task, onEdit }: TaskItemProps) {
                 sx={{
                   justifyContent: 'space-between',
                   width: '100%',
+                  py: 1,
+                  px: 1,
                   '&:hover .hover-buttons': {
                     opacity: 1,
                     visibility: 'visible',
@@ -116,24 +126,24 @@ function TaskItem({ task, onEdit }: TaskItemProps) {
                   direction="row"
                   className="hover-buttons"
                   sx={{
-                    opacity: 0,
-                    visibility: 'hidden',
+                    opacity: { xs: 1, md: 0 },
+                    visibility: { xs: 'visible', md: 'hidden' },
                     transition: 'opacity 0.2s ease',
                     justifyContent: 'center',
                     alignItems: 'center',
                   }}
                 >
                   <IconButton
-                    sx={{ padding: '0.25rem' }}
+                    sx={{ padding: '0.25rem', p: { xs: 1, md: 0.5 } }}
                     onClick={() => onEdit(mapTaskToForm(task))}
                   >
-                    <EditOutlined fontSize="small" />
+                    <EditOutlined />
                   </IconButton>
                   <IconButton
-                    sx={{ padding: '0.25rem' }}
+                    sx={{ padding: '0.25rem', p: { xs: 1, md: 0.5 } }}
                     onClick={() => setOpenDeleteConfirm(true)}
                   >
-                    <DeleteOutline fontSize="small" />
+                    <DeleteOutline />
                   </IconButton>
                   <ConfirmDeleteDialog
                     open={openDeleteConfirm}
@@ -145,7 +155,7 @@ function TaskItem({ task, onEdit }: TaskItemProps) {
               </Stack>
             </ListItem>
             <Divider />
-          </div>
+          </Box>
         </motion.div>
       )}
     </AnimatePresence>
