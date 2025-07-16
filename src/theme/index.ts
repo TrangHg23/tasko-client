@@ -84,6 +84,16 @@ let theme = createTheme(baseTheme, {
         },
       },
     },
+
+    MuiMenuItem: {
+      styleOverrides: {
+        root: {
+          minHeight: 36,
+          paddingTop: 6,
+          paddingBottom: 6,
+        },
+      },
+    },
     MuiListItemText: {
       styleOverrides: {
         root: {

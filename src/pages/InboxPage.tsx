@@ -62,7 +62,7 @@ function InboxPage() {
         </div>
         <Stack direction="row" sx={{ alignItems: 'center' }}>
           <IconButton size="small" sx={{ mb: 0.5 }} onClick={handleAddTask}>
-            <Add sx={{ color: 'primary.main' }} />
+            <Add sx={{ color: 'primary.main', transform: { xs: 'scale(1.3)', md: 'scale(1)' } }} />
           </IconButton>
           <Typography sx={{ color: '#757575' }}>Add task</Typography>
         </Stack>
