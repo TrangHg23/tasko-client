@@ -1,3 +1,4 @@
+import { PriorityLevel } from '@app-types/enum';
 import { taskAPI } from './../services/task';
 import type { GetTasksParams, ITask } from '@app-types/task';
 import { queryClient } from '@lib/queryClient';
@@ -69,4 +70,19 @@ export const useDeleteTask = () => {
       enqueueSnackbar('Faild to delete task', { variant: 'error' });
     },
   });
+};
+
+export const useTaskDefaults = (context: 'today' | 'inbox' | 'category', categoryId?: string) => {
+  const today = new Date();
+
+  switch (context) {
+    case 'inbox':
+      return { title: '', description: '', dueDate: null, priority: PriorityLevel.LOW };
+    case 'today':
+      return { title: '', description: '', dueDate: today, priority: PriorityLevel.LOW };
+    case 'category':
+      return { title: '', description: '', dueDate: null, priority: PriorityLevel.LOW, categoryId };
+    default:
+      return { title: '', description: '', dueDate: null, priority: PriorityLevel.LOW };
+  }
 };

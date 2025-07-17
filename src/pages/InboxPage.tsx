@@ -1,13 +1,14 @@
 import type { SelectedTaskForm, TaskRequest } from '@app-types/task';
 import TaskItem from '@components/Task';
 import TaskEditor from '@components/Task/TaskEditor';
-import { useAddTask, useTasks, useUpdateTask } from '@hooks/useTask';
+import { useAddTask, useTaskDefaults, useTasks, useUpdateTask } from '@hooks/useTask';
 import { Add } from '@mui/icons-material';
 import { Box, Container, IconButton, List, Stack, Typography } from '@mui/material';
 import { useState } from 'react';
 
 function InboxPage() {
   const { data: inboxTasks } = useTasks({ inbox: true });
+  const defaultInboxValues = useTaskDefaults('inbox');
   const [selectedTask, setSelectedTask] = useState<SelectedTaskForm | undefined>(undefined);
   const [open, setOpen] = useState(false);
   const { mutateAsync: mutateAsyncAdd, isPending: isPendingAdd } = useAddTask();
@@ -69,6 +70,7 @@ function InboxPage() {
         <Box sx={{ mt: -4 }}>
           {open && (
             <TaskEditor
+              defaultFormValues={defaultInboxValues}
               initialData={selectedTask}
               onClose={() => handleCloseEditor()}
               onSubmit={handleSubmit}
