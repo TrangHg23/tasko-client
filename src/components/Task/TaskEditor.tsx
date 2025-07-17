@@ -20,29 +20,27 @@ import { useEffect, useState } from 'react';
 import { PRIORITY_META, PriorityLevel } from '@app-types/enum';
 
 type TaskEditorProps = {
+  defaultFormValues: TaskFormValues;
   initialData?: SelectedTaskForm;
   onClose: () => void;
   onSubmit: (data: TaskRequest) => void;
   isPending?: boolean;
 };
 
-function TaskEditor({ initialData, onClose, onSubmit, isPending }: TaskEditorProps) {
-  const initialValues = {
-    title: '',
-    description: '',
-    dueDate: null,
-    priority: PriorityLevel.LOW,
-  };
-
+function TaskEditor({
+  defaultFormValues,
+  initialData,
+  onClose,
+  onSubmit,
+  isPending,
+}: TaskEditorProps) {
   const { control, handleSubmit, watch, reset } = useForm<TaskFormValues>({
-    defaultValues: initialValues,
+    defaultValues: defaultFormValues,
   });
 
   useEffect(() => {
     if (initialData) {
       reset({ ...initialData });
-    } else {
-      reset(initialValues);
     }
   }, [initialData]);
 
