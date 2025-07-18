@@ -11,9 +11,7 @@ import {
   Stack,
   TextField,
 } from '@mui/material';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { Controller, useForm } from 'react-hook-form';
 import { format, startOfToday } from 'date-fns';
 import { useEffect, useState } from 'react';
@@ -66,198 +64,188 @@ function TaskEditor({
   };
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <Paper
-        elevation={3}
-        sx={{
-          position: 'absolute',
-          width: '100%',
-          maxWidth: '800px',
-          bgcolor: 'background.default',
-          mx: 'auto',
-        }}
-      >
-        <Box component="form" sx={{ p: 1.5 }} onSubmit={handleSubmit(handleSubmitTaskData)}>
-          <Stack spacing={0.2}>
+    <Paper
+      elevation={3}
+      sx={{
+        position: 'absolute',
+        width: '100%',
+        maxWidth: '800px',
+        bgcolor: 'background.default',
+        mx: 'auto',
+      }}
+    >
+      <Box component="form" sx={{ p: 1.5 }} onSubmit={handleSubmit(handleSubmitTaskData)}>
+        <Stack spacing={0.2}>
+          <Controller
+            name="title"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <TextField
+                sx={{
+                  '& input': {
+                    fontWeight: 600,
+                    fontSize: '0.875rem',
+                    '::placeholder': {
+                      fontWeight: 600,
+                      color: '#999f',
+                      opacity: 1,
+                      fontSize: '0.875rem',
+                    },
+                  },
+                }}
+                variant="standard"
+                size="small"
+                fullWidth
+                slotProps={{ input: { disableUnderline: true } }}
+                placeholder="Task name"
+                {...field}
+              />
+            )}
+          />
+
+          <Controller
+            name="description"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <TextField
+                variant="standard"
+                size="small"
+                sx={{ '& input': { fontSize: '0.8125rem' } }}
+                slotProps={{ input: { disableUnderline: true } }}
+                fullWidth
+                placeholder="Description"
+                {...field}
+              />
+            )}
+          />
+
+          <Stack direction="row" spacing={1} sx={{ pb: 1.2 }}>
             <Controller
-              name="title"
               control={control}
-              defaultValue=""
+              name="dueDate"
               render={({ field }) => (
-                <TextField
+                <DatePicker
+                  {...field}
+                  onChange={(date) => field.onChange(date)}
+                  enableAccessibleFieldDOMStructure={false}
+                  value={field.value}
+                  format="d MMM"
+                  minDate={startOfToday()}
                   sx={{
                     '& input': {
-                      fontWeight: 600,
-                      fontSize: '0.875rem',
-                      '::placeholder': {
-                        fontWeight: 600,
-                        color: '#999f',
-                        opacity: 1,
-                        fontSize: '0.875rem',
+                      padding: '0.25rem',
+                      fontSize: '0.75rem',
+                    },
+                    '& .MuiInputBase-root': {
+                      padding: 0,
+                      fontSize: '0.75rem',
+                    },
+                    '& .MuiSvgIcon-root': {
+                      fontSize: '18px',
+                    },
+                    '& .MuiIconButton-root': {
+                      padding: 0,
+                      marginRight: '0.5rem',
+                    },
+                  }}
+                  slotProps={{
+                    textField: {
+                      size: 'small',
+                      variant: 'outlined',
+                      InputProps: {
+                        endAdornment: field.value ? (
+                          <IconButton size="small" onClick={() => field.onChange(null)} edge="end">
+                            <Clear fontSize="small" />
+                          </IconButton>
+                        ) : null,
                       },
                     },
                   }}
-                  variant="standard"
-                  size="small"
-                  fullWidth
-                  slotProps={{ input: { disableUnderline: true } }}
-                  placeholder="Task name"
-                  {...field}
                 />
               )}
             />
 
             <Controller
-              name="description"
+              name="priority"
               control={control}
-              defaultValue=""
               render={({ field }) => (
-                <TextField
-                  variant="standard"
-                  size="small"
-                  sx={{ '& input': { fontSize: '0.8125rem' } }}
-                  slotProps={{ input: { disableUnderline: true } }}
-                  fullWidth
-                  placeholder="Description"
-                  {...field}
-                />
+                <>
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    startIcon={<Flag sx={{ color: PRIORITY_META[field.value].color }} />}
+                    sx={{
+                      fontWeight: 'normal',
+                      padding: '1px 3px',
+                      color: '#6c757d',
+                      fontSize: '0.75rem',
+                      borderColor: '#c4c4c4',
+                    }}
+                    onClick={handleOpen}
+                  >
+                    {field.value === PriorityLevel.LOW
+                      ? 'Priority'
+                      : PRIORITY_META[field.value].display}
+                  </Button>
+                  <Menu
+                    id="priority-menu"
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                    slotProps={{ list: { sx: { paddingTop: 0, paddingBottom: 0 } } }}
+                  >
+                    {(Object.keys(PriorityLevel) as PriorityLevel[]).map((option) => (
+                      <MenuItem
+                        key={option}
+                        selected={option === field.value}
+                        onClick={() => {
+                          field.onChange(option);
+                          handleClose();
+                        }}
+                        sx={{
+                          fontSize: '0.75rem',
+                          '&.Mui-selected': { backgroundColor: '#d1eaff', color: 'primary.main' },
+                        }}
+                      >
+                        <Flag fontSize="small" sx={{ mr: 1, color: PRIORITY_META[option].color }} />
+                        {PRIORITY_META[option].display}
+                      </MenuItem>
+                    ))}
+                  </Menu>
+                </>
               )}
             />
-
-            <Stack direction="row" spacing={1} sx={{ pb: 1.2 }}>
-              <Controller
-                control={control}
-                name="dueDate"
-                render={({ field }) => (
-                  <DatePicker
-                    {...field}
-                    onChange={(date) => field.onChange(date)}
-                    enableAccessibleFieldDOMStructure={false}
-                    value={field.value}
-                    format="d MMM"
-                    minDate={startOfToday()}
-                    sx={{
-                      width: 75,
-                      '& input': {
-                        padding: '0.25rem',
-                        fontSize: '0.75rem',
-                      },
-                      '& .MuiInputBase-root': {
-                        padding: 0,
-                        fontSize: '0.75rem',
-                      },
-                      '& .MuiSvgIcon-root': {
-                        fontSize: '18px',
-                      },
-                      '& .MuiIconButton-root': {
-                        padding: 0,
-                        marginRight: '0.5rem',
-                      },
-                    }}
-                    slotProps={{
-                      textField: {
-                        size: 'small',
-                        variant: 'outlined',
-                        InputProps: {
-                          endAdornment: field.value ? (
-                            <IconButton
-                              size="small"
-                              onClick={() => field.onChange(null)}
-                              edge="end"
-                            >
-                              <Clear fontSize="small" />
-                            </IconButton>
-                          ) : null,
-                        },
-                      },
-                    }}
-                  />
-                )}
-              />
-
-              <Controller
-                name="priority"
-                control={control}
-                render={({ field }) => (
-                  <>
-                    <Button
-                      size="small"
-                      variant="outlined"
-                      startIcon={<Flag sx={{ color: PRIORITY_META[field.value].color }} />}
-                      sx={{
-                        fontWeight: 'normal',
-                        padding: '1px 3px',
-                        color: '#6c757d',
-                        fontSize: '0.75rem',
-                        borderColor: '#c4c4c4',
-                      }}
-                      onClick={handleOpen}
-                    >
-                      {field.value === PriorityLevel.LOW
-                        ? 'Priority'
-                        : PRIORITY_META[field.value].display}
-                    </Button>
-                    <Menu
-                      id="priority-menu"
-                      anchorEl={anchorEl}
-                      open={open}
-                      onClose={handleClose}
-                      slotProps={{ list: { sx: { paddingTop: 0, paddingBottom: 0 } } }}
-                    >
-                      {(Object.keys(PriorityLevel) as PriorityLevel[]).map((option) => (
-                        <MenuItem
-                          key={option}
-                          selected={option === field.value}
-                          onClick={() => {
-                            field.onChange(option);
-                            handleClose();
-                          }}
-                          sx={{
-                            fontSize: '0.75rem',
-                            '&.Mui-selected': { backgroundColor: '#d1eaff', color: 'primary.main' },
-                          }}
-                        >
-                          <Flag
-                            fontSize="small"
-                            sx={{ mr: 1, color: PRIORITY_META[option].color }}
-                          />
-                          {PRIORITY_META[option].display}
-                        </MenuItem>
-                      ))}
-                    </Menu>
-                  </>
-                )}
-              />
-            </Stack>
-
-            <Divider />
-            <Stack direction="row" spacing={2} sx={{ justifyContent: 'flex-end', pt: 1.2 }}>
-              <Button
-                variant="text"
-                size="small"
-                sx={{ bgcolor: '#eee', color: '#444' }}
-                onClick={onClose}
-              >
-                Cancel
-              </Button>
-              <Button
-                variant="contained"
-                type="submit"
-                size="small"
-                disabled={isDisabled}
-                sx={{
-                  bgcolor: isDisabled ? '#bbdefb' : 'primary.main',
-                  color: '#fff',
-                  '&.Mui-disabled': { bgcolor: '#64b5f6', color: '#fff' },
-                }}
-              >
-                Save
-              </Button>
-            </Stack>
           </Stack>
-        </Box>
-      </Paper>
-    </LocalizationProvider>
+
+          <Divider />
+          <Stack direction="row" spacing={2} sx={{ justifyContent: 'flex-end', pt: 1.2 }}>
+            <Button
+              variant="text"
+              size="small"
+              sx={{ bgcolor: '#eee', color: '#444' }}
+              onClick={onClose}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="contained"
+              type="submit"
+              size="small"
+              disabled={isDisabled}
+              sx={{
+                bgcolor: isDisabled ? '#bbdefb' : 'primary.main',
+                color: '#fff',
+                '&.Mui-disabled': { bgcolor: '#64b5f6', color: '#fff' },
+              }}
+            >
+              Save
+            </Button>
+          </Stack>
+        </Stack>
+      </Box>
+    </Paper>
   );
 }
 

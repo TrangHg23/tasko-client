@@ -7,7 +7,7 @@ import LoadingSpinner from '@components/common/LoadingSpinner';
 import ErrorBoundary from '@components/errors/ErrorBoundary';
 import NotFound from '@components/errors/NotFound';
 import PrivateRoute from './PrivateRoute';
-import { Auth, InboxPage, TodayPage } from '@pages/index';
+import { Auth, InboxPage, TodayPage, UpcomingPage } from '@pages/index';
 
 const routesConfig: RouteObject[] = [
   {
@@ -54,6 +54,14 @@ const routesConfig: RouteObject[] = [
             element: (
               <Suspense fallback={<LoadingSpinner />}>
                 <InboxPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: 'upcoming',
+            element: (
+              <Suspense fallback={<LoadingSpinner />}>
+                <UpcomingPage />
               </Suspense>
             ),
           },
