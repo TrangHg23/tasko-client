@@ -1,5 +1,6 @@
 import { Button, Box, Typography } from '@mui/material';
 import { addDays, format, isBefore, isSameDay, startOfWeek, startOfToday } from 'date-fns';
+import { useEffect, useRef } from 'react';
 
 type Props = {
   selectedDate: Date;
@@ -11,8 +12,23 @@ export default function HorizontalDateList({ selectedDate, onSelectDate }: Props
   const startOfWeekDate = startOfWeek(selectedDate, { weekStartsOn: 1 });
   const days = Array.from({ length: 7 }, (_, i) => addDays(startOfWeekDate, i));
 
+  const containerRef = useRef<HTMLDivElement>(null);
+  const selectedButtonRefs = useRef<(HTMLButtonElement | null)[]>([]);
+
+  useEffect(() => {
+    const index = days.findIndex((date) => isSameDay(date, selectedDate));
+    const selectedButton = selectedButtonRefs.current[index];
+    if (selectedButton && containerRef.current) {
+      selectedButton.scrollIntoView({
+        behavior: 'smooth',
+        inline: 'start',
+        block: 'nearest',
+      });
+    }
+  }, [selectedDate]);
+
   return (
-    <Box display="flex" gap={1}>
+    <Box display="flex" gap={1} justifyContent="space-between">
       {days.map((date) => {
         const isToday = isSameDay(date, today);
         const isSelected = isSameDay(date, selectedDate);
@@ -26,7 +42,6 @@ export default function HorizontalDateList({ selectedDate, onSelectDate }: Props
             sx={{
               minWidth: 80,
               padding: 0.5,
-              mr: 2,
               borderRadius: 2,
               color: '#424242',
               opacity: isPast ? 0.5 : 1,
@@ -42,6 +57,7 @@ export default function HorizontalDateList({ selectedDate, onSelectDate }: Props
                 bgcolor: isSelected ? 'primary.main' : 'transparent',
                 fontWeight: isToday || isSelected ? 600 : 400,
                 ml: 0.2,
+                minWidth: '1.5rem',
                 p: '0.1rem 0.3rem',
                 borderRadius: '5px',
               }}
