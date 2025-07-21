@@ -1,5 +1,5 @@
 import { createBrowserRouter, RouterProvider, type RouteObject } from 'react-router';
-import { Suspense } from 'react';
+import { lazy, Suspense } from 'react';
 import PublicRoute from '@routes/PublicRoute';
 import MainLayout from '@layouts/MainLayout';
 import AuthLayout from '@layouts/AuthLayout';
@@ -7,7 +7,11 @@ import LoadingSpinner from '@components/common/LoadingSpinner';
 import ErrorBoundary from '@components/errors/ErrorBoundary';
 import NotFound from '@components/errors/NotFound';
 import PrivateRoute from './PrivateRoute';
-import { Auth, InboxPage, TodayPage, UpcomingPage } from '@pages/index';
+import { Auth } from '@pages/index';
+
+const InboxPage = lazy(() => import('@pages/InboxPage'));
+const TodayPage = lazy(() => import('@pages/TodayPage'));
+const UpcomingPage = lazy(() => import('@pages/UpcomingPage'));
 
 const routesConfig: RouteObject[] = [
   {
