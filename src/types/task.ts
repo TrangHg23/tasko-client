@@ -18,7 +18,7 @@ export interface ITask {
 export interface GetTasksParams {
   inbox?: boolean;
   categoryId?: string;
-  due?: string;
+  dueDate?: string;
   status?: string;
 }
 

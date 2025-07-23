@@ -16,7 +16,7 @@ export default function MainLayout() {
   }, [isMobile]);
 
   return (
-    <Box display="flex" height="100dvh" position="relative" overflow="hidden">
+    <Box display="flex" height="100dvh">
       <IconButton
         onClick={() => setOpen(!open)}
         sx={{
@@ -65,15 +65,15 @@ export default function MainLayout() {
       <Box
         component="main"
         sx={{
-          ml: 1,
-          width: !isMobile && open ? `calc(100vw - ${drawerWidth}px)` : '100dvw',
+          ml: !isMobile && open ? `${drawerWidth}px` : 0,
+          width: '100%',
           height: '100dvh',
-          transition: 'transform 0.3s',
-          transform: !isMobile && open ? `translateX(${drawerWidth}px)` : 'translateX(0)',
+          transition: 'margin-left 0.3s',
           display: 'flex',
           justifyContent: 'center',
           pt: 3,
           px: 2,
+          overflowX: 'hidden',
         }}
       >
         <Box sx={{ width: '100%', maxWidth: 800, mt: 6 }}>

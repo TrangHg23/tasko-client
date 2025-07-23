@@ -70,7 +70,6 @@ function TaskEditor({
       <Paper
         elevation={3}
         sx={{
-          position: 'absolute',
           width: '100%',
           maxWidth: '800px',
           bgcolor: 'background.default',

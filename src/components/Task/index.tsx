@@ -6,7 +6,7 @@ import {
   EditOutlined,
   RadioButtonUnchecked,
 } from '@mui/icons-material';
-import { Box, Checkbox, Divider, IconButton, ListItem, Stack, Typography } from '@mui/material';
+import { Box, Checkbox, IconButton, ListItem, Stack, Typography } from '@mui/material';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
 import { PRIORITY_META } from '@app-types/enum';
@@ -66,7 +66,7 @@ function TaskItem({ task, onEdit }: TaskItemProps) {
               },
             }}
           >
-            <ListItem sx={{ py: 0.5, pl: 0 }}>
+            <ListItem sx={{ py: 0.5, pl: 0, borderBottom: '1px solid #eee' }}>
               <Checkbox
                 checked={checked}
                 onChange={handleChange}
@@ -154,7 +154,6 @@ function TaskItem({ task, onEdit }: TaskItemProps) {
                 </Stack>
               </Stack>
             </ListItem>
-            <Divider />
           </Box>
         </motion.div>
       )}
