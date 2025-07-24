@@ -1,22 +1,22 @@
-import type { ITask, SelectedTaskForm } from '@app-types/task';
-import { Box, IconButton, List, Stack, Typography } from '@mui/material';
+import type { ITask, TaskFormValues } from '@app-types/task';
+import { Box, IconButton, Stack, Typography } from '@mui/material';
 import { useState } from 'react';
-import TaskItem from '.';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
+import TaskListController from './TaskListController';
 
 type Props = {
-  tasks: ITask[] | undefined;
-  handleEdit: (data: SelectedTaskForm) => void;
+  overdueTasks: ITask[] | undefined;
+  defaultFormValues: TaskFormValues;
 };
 
-export default function OverdueTask({ tasks, handleEdit }: Props) {
+export default function OverdueSection({ overdueTasks, defaultFormValues }: Props) {
   const [expanded, setExpanded] = useState(false);
 
   return (
     <Box sx={{ mt: 2 }}>
       <Stack direction="row" alignItems={'center'} sx={{ borderBottom: '1px solid #eee' }}>
         <Typography variant="subtitle2" fontWeight="bold" color="primary">
-          Overdue ({tasks?.length})
+          Overdue ({overdueTasks?.length})
         </Typography>
         <IconButton
           onClick={() => setExpanded((prev) => !prev)}
@@ -27,11 +27,12 @@ export default function OverdueTask({ tasks, handleEdit }: Props) {
       </Stack>
 
       {expanded && (
-        <List component="div" sx={{ p: 0 }}>
-          {tasks?.map((task) => (
-            <TaskItem key={task.id} task={task} onEdit={handleEdit} />
-          ))}
-        </List>
+        <TaskListController
+          tasks={overdueTasks}
+          defaultFormValues={defaultFormValues}
+          allowAdd={false}
+          showDueDate={true}
+        />
       )}
     </Box>
   );
