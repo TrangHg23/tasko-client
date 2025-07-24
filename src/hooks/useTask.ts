@@ -72,7 +72,7 @@ export const useDeleteTask = () => {
   });
 };
 
-export const useTaskDefaults = (context: 'today' | 'inbox' | 'category', categoryId?: string) => {
+export const useTaskDefaults = (context?: 'today' | 'inbox' | 'category', categoryId?: string) => {
   const today = new Date();
 
   switch (context) {

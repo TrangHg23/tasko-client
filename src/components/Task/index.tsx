@@ -4,9 +4,10 @@ import {
   CheckCircle,
   DeleteOutline,
   EditOutlined,
+  Event,
   RadioButtonUnchecked,
 } from '@mui/icons-material';
-import { Box, Checkbox, Divider, IconButton, ListItem, Stack, Typography } from '@mui/material';
+import { Box, Checkbox, IconButton, ListItem, Stack, Typography } from '@mui/material';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
 import { PRIORITY_META } from '@app-types/enum';
@@ -14,18 +15,21 @@ import { useDeleteTask, usePatchTask } from '@hooks/useTask';
 import { enqueueSnackbar } from 'notistack';
 import { mapTaskToForm } from 'src/utils/task';
 import ConfirmDeleteDialog from './ConfirmDeleteDialog';
+import { format, isBefore, startOfToday } from 'date-fns';
 
 type TaskItemProps = {
   task: ITask;
   onEdit: (task: SelectedTaskForm) => void;
+  showDueDate?: boolean;
 };
 
-function TaskItem({ task, onEdit }: TaskItemProps) {
+function TaskItem({ task, onEdit, showDueDate }: TaskItemProps) {
   const [checked, setChecked] = useState(false);
   const [visible, setVisible] = useState(true);
   const [openDeleteConfirm, setOpenDeleteConfirm] = useState(false);
   const { mutateAsync } = usePatchTask();
   const { mutateAsync: mutateAsyncDelete } = useDeleteTask();
+  const isOverdue = task.dueDate && isBefore(new Date(task.dueDate), startOfToday());
 
   const handleChange = async () => {
     const completeRequest: PatchTaskRequest = {
@@ -66,7 +70,7 @@ function TaskItem({ task, onEdit }: TaskItemProps) {
               },
             }}
           >
-            <ListItem sx={{ py: 0.5, pl: 0 }}>
+            <ListItem sx={{ py: 0.5, pl: 0, borderBottom: '1px solid #eee' }}>
               <Checkbox
                 checked={checked}
                 onChange={handleChange}
@@ -121,6 +125,20 @@ function TaskItem({ task, onEdit }: TaskItemProps) {
                 <Stack spacing={0.2} justifyContent={'center'}>
                   <Typography>{task.title}</Typography>
                   <Typography variant="body2">{task.description}</Typography>
+                  {showDueDate && task.dueDate && (
+                    <Stack
+                      direction="row"
+                      spacing={0.5}
+                      alignItems="center"
+                      sx={{ color: isOverdue ? 'error.main' : '#9C27B0' }}
+                    >
+                      <Event sx={{ fontSize: '13px' }} />
+
+                      <Typography variant="caption">
+                        {format(new Date(task.dueDate), 'MMM dd')}
+                      </Typography>
+                    </Stack>
+                  )}
                 </Stack>
                 <Stack
                   direction="row"
@@ -154,7 +172,6 @@ function TaskItem({ task, onEdit }: TaskItemProps) {
                 </Stack>
               </Stack>
             </ListItem>
-            <Divider />
           </Box>
         </motion.div>
       )}

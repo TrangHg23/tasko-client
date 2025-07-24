@@ -8,7 +8,7 @@ const baseTheme = createTheme({
     secondary: { main: '#607D8B' },
     success: { main: '#4CAF50' },
     warning: { main: '#FF9800' },
-    error: { main: '#F44336' },
+    error: { main: '#D1453B' },
     background: { default: '#ffff', paper: '#f9fbfd', popup: '#f5f7fa' },
   },
 
