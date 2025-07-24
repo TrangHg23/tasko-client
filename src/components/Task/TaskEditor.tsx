@@ -64,45 +64,45 @@ function TaskEditor({
   };
 
   return (
-    <Paper
-      elevation={3}
-      sx={{
-        position: 'absolute',
-        width: '100%',
-        maxWidth: '800px',
-        bgcolor: 'background.default',
-        mx: 'auto',
-      }}
-    >
-      <Box component="form" sx={{ p: 1.5 }} onSubmit={handleSubmit(handleSubmitTaskData)}>
-        <Stack spacing={0.2}>
-          <Controller
-            name="title"
-            control={control}
-            defaultValue=""
-            render={({ field }) => (
-              <TextField
-                sx={{
-                  '& input': {
-                    fontWeight: 600,
-                    fontSize: '0.875rem',
-                    '::placeholder': {
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <Paper
+        elevation={3}
+        sx={{
+          width: '100%',
+          maxWidth: '800px',
+          bgcolor: 'background.default',
+          mx: 'auto',
+        }}
+      >
+        <Box component="form" sx={{ p: 1.5 }} onSubmit={handleSubmit(handleSubmitTaskData)}>
+          <Stack spacing={0.2}>
+            <Controller
+              name="title"
+              control={control}
+              defaultValue=""
+              render={({ field }) => (
+                <TextField
+                  sx={{
+                    '& input': {
                       fontWeight: 600,
-                      color: '#999f',
-                      opacity: 1,
                       fontSize: '0.875rem',
+                      '::placeholder': {
+                        fontWeight: 600,
+                        color: '#999f',
+                        opacity: 1,
+                        fontSize: '0.875rem',
+                      },
                     },
-                  },
-                }}
-                variant="standard"
-                size="small"
-                fullWidth
-                slotProps={{ input: { disableUnderline: true } }}
-                placeholder="Task name"
-                {...field}
-              />
-            )}
-          />
+                  }}
+                  variant="standard"
+                  size="small"
+                  fullWidth
+                  slotProps={{ input: { disableUnderline: true } }}
+                  placeholder="Task name"
+                  {...field}
+                />
+              )}
+            />
 
           <Controller
             name="description"
