@@ -4,7 +4,7 @@ import { Container, Typography } from '@mui/material';
 
 function InboxPage() {
   const { data: inboxTasks } = useTasks({ inbox: true });
-  const defaultInboxValues = useTaskDefaults('inbox');
+  const defaultInboxValues = useTaskDefaults({ context: 'inbox' });
 
   return (
     <div>

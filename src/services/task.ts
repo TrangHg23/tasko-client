@@ -1,15 +1,25 @@
 import type {
   GetTasksParams,
+  ITask,
   PatchTaskRequest,
   TaskRequest,
   UpdateTaskRequest,
 } from '@app-types/task';
 import apiClient from '@lib/axios';
+import qs from 'qs';
 
 export const taskAPI = {
   getTasks: async (params: GetTasksParams) => {
     const res = await apiClient.get('/tasks', { params });
     return res.data;
+  },
+
+  getTasksByDateList: async (params: { dueDates: string[] }) => {
+    const res = await apiClient.get('/tasks', {
+      params,
+      paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'repeat' }),
+    });
+    return res.data as Record<string, ITask[]>;
   },
 
   createTask: async (data: TaskRequest) => {

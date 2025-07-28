@@ -1,14 +1,23 @@
 import { PriorityLevel } from '@app-types/enum';
 import { taskAPI } from './../services/task';
-import type { GetTasksParams, ITask } from '@app-types/task';
+import type { GetTasksParams, ITask, SelectedTaskForm, TaskRequest } from '@app-types/task';
 import { queryClient } from '@lib/queryClient';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
+import { useState } from 'react';
 
 export const useTasks = (params: GetTasksParams) => {
   return useQuery<ITask[]>({
     queryKey: ['tasks', params],
     queryFn: () => taskAPI.getTasks(params),
+  });
+};
+
+export const useUpcomingTasks = (dueDates: string[]) => {
+  return useQuery({
+    queryKey: ['tasks', dueDates],
+    queryFn: () => taskAPI.getTasksByDateList({ dueDates }),
+    placeholderData: keepPreviousData,
   });
 };
 
@@ -34,6 +43,8 @@ export const useAddTask = () => {
 };
 
 export const usePatchTask = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationKey: ['patchTask'],
     mutationFn: taskAPI.updatePartialTask,
@@ -41,7 +52,7 @@ export const usePatchTask = () => {
       ['tasks', 'taskCount'].forEach((key) => queryClient.invalidateQueries({ queryKey: [key] }));
     },
     onError: () => {
-      enqueueSnackbar('Faild to update task', { variant: 'error' });
+      enqueueSnackbar('Failed to update task', { variant: 'error' });
     },
   });
 };
@@ -72,17 +83,80 @@ export const useDeleteTask = () => {
   });
 };
 
-export const useTaskDefaults = (context?: 'today' | 'inbox' | 'category', categoryId?: string) => {
-  const today = new Date();
+type TaskDefaultsContext =
+  | { context: 'inbox' }
+  | { context: 'dueDate'; dueDate: Date }
+  | { context: 'category'; categoryId: string };
 
-  switch (context) {
+export const useTaskDefaults = (ctx?: TaskDefaultsContext) => {
+  const baseDefaults = {
+    title: '',
+    description: '',
+    dueDate: null,
+    priority: PriorityLevel.LOW,
+  };
+
+  switch (ctx?.context) {
     case 'inbox':
-      return { title: '', description: '', dueDate: null, priority: PriorityLevel.LOW };
-    case 'today':
-      return { title: '', description: '', dueDate: today, priority: PriorityLevel.LOW };
+      return baseDefaults;
+    case 'dueDate':
+      return {
+        ...baseDefaults,
+        dueDate: ctx.dueDate ?? null,
+      };
     case 'category':
-      return { title: '', description: '', dueDate: null, priority: PriorityLevel.LOW, categoryId };
+      return {
+        ...baseDefaults,
+        categoryId: ctx.categoryId,
+      };
     default:
-      return { title: '', description: '', dueDate: null, priority: PriorityLevel.LOW };
+      return baseDefaults;
   }
+};
+
+export const useTaskEditor = () => {
+  const [open, setOpen] = useState(false);
+  const [selectedTask, setSelectedTask] = useState<SelectedTaskForm | undefined>();
+
+  const { mutateAsync: addTask, isPending: isPendingAdd } = useAddTask();
+  const { mutateAsync: updateTask, isPending: isPendingUpdate } = useUpdateTask();
+
+  const handleSubmit = async (data: TaskRequest) => {
+    try {
+      if (selectedTask) {
+        await updateTask({ id: selectedTask.id, task: data });
+        setSelectedTask(undefined);
+        setOpen(false);
+      } else {
+        await addTask(data);
+      }
+    } catch (e) {
+      console.error('Error:', e);
+    }
+  };
+
+  const handleEdit = (task: SelectedTaskForm) => {
+    setSelectedTask(task);
+    setOpen(true);
+  };
+
+  const handleAddNew = () => {
+    setSelectedTask(undefined);
+    setOpen(true);
+  };
+
+  const handleCloseEditor = () => {
+    setSelectedTask(undefined);
+    setOpen(false);
+  };
+  return {
+    open,
+    selectedTask,
+    isPendingAdd,
+    isPendingUpdate,
+    handleSubmit,
+    handleEdit,
+    handleAddNew,
+    handleCloseEditor,
+  };
 };
