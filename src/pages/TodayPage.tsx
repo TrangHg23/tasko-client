@@ -5,10 +5,11 @@ import { useTaskDefaults, useTasks } from '@hooks/useTask';
 import OverdueSection from '@components/Task/OverdueSection';
 
 function TodayPage() {
-  const todayStr = format(new Date(), 'yyyy-MM-dd');
+  const today = new Date();
+  const todayStr = format(today, 'yyyy-MM-dd');
   const { data: todayTasks } = useTasks({ dueDate: todayStr });
   const { data: overdueTasks } = useTasks({ status: 'overdue' });
-  const defaultTodayValues = useTaskDefaults('today');
+  const defaultTodayValues = useTaskDefaults({ context: 'dueDate', dueDate: today });
   const defaultValues = useTaskDefaults();
 
   return (

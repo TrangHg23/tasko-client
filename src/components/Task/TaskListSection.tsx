@@ -48,7 +48,7 @@ export default function TaskListSection({
           <Box key={task.id}>
             <TaskItem task={task} onEdit={onEdit} showDueDate={showDueDate} />
             {selectedTask?.id === task.id && (
-              <Box mt={1} mb={2}>
+              <Box my={1} width="100%" zIndex={1} position="relative" border="1px solid #fff">
                 <TaskEditor
                   defaultFormValues={defaultFormValues}
                   initialData={selectedTask}
@@ -76,7 +76,7 @@ export default function TaskListSection({
             <Typography sx={{ color: '#757575' }}>Add task</Typography>
           </Stack>
           {open && !selectedTask && (
-            <Box mt={-4} mb={4} position="absolute" width="100%">
+            <Box mt={-4} width="100%" zIndex={1} position="relative" border="1px solid #fff">
               <TaskEditor
                 defaultFormValues={defaultFormValues}
                 initialData={undefined}

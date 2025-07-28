@@ -1,4 +1,5 @@
-import { Button, Box, Typography } from '@mui/material';
+import { Button, Box, Typography, useTheme } from '@mui/material';
+import { useMediaQuery } from '@mui/system';
 import { addDays, format, isBefore, isSameDay, startOfWeek, startOfToday } from 'date-fns';
 import { useEffect, useRef } from 'react';
 
@@ -14,6 +15,9 @@ export default function HorizontalDateList({ selectedDate, onSelectDate }: Props
 
   const containerRef = useRef<HTMLDivElement>(null);
   const selectedButtonRefs = useRef<(HTMLButtonElement | null)[]>([]);
+
+  const theme = useTheme();
+  const isSmall = useMediaQuery(theme.breakpoints.down('sm'));
 
   useEffect(() => {
     const index = days.findIndex((date) => isSameDay(date, selectedDate));
@@ -40,15 +44,17 @@ export default function HorizontalDateList({ selectedDate, onSelectDate }: Props
             onClick={() => !isPast && onSelectDate(date)}
             disabled={isPast}
             sx={{
-              minWidth: 80,
-              padding: 0.5,
+              width: '100%',
+              m: 0,
+              minWidth: isSmall ? 0 : 80,
+              padding: isSmall ? 0 : 0.5,
               borderRadius: 2,
               color: '#424242',
               opacity: isPast ? 0.5 : 1,
             }}
           >
             <Typography variant="caption" fontWeight={isToday || isSelected ? 600 : 400}>
-              {format(date, 'EEE')}
+              {isSmall ? '' : format(date, 'EEE')}
             </Typography>
             <Typography
               variant="caption"
@@ -57,7 +63,7 @@ export default function HorizontalDateList({ selectedDate, onSelectDate }: Props
                 bgcolor: isSelected ? 'primary.main' : 'transparent',
                 fontWeight: isToday || isSelected ? 600 : 400,
                 ml: 0.2,
-                minWidth: '1.5rem',
+                minWidth: { sx: 0, md: '1.5rem' },
                 p: '0.1rem 0.3rem',
                 borderRadius: '5px',
               }}

@@ -43,22 +43,22 @@ export default function DatePickerButton({ selectedDate, onChange }: Props) {
           }}
           disablePast
           sx={{
-            width: 240,
-            height: 260,
+            width: { sx: '100%', md: 240 },
+            height: { sx: '100%', md: 260 },
             alignItems: 'center',
             '& .MuiPickersCalendarHeader-root': {
               width: '100%',
-              mt: 0,
+              mt: { md: 0 },
             },
             '& .MuiPickersCalendarHeader-label': {
               fontSize: '0.8125rem',
               fontWeight: 'bold',
             },
             '& .MuiButtonBase-root, & .MuiTypography-root': {
-              width: 24,
-              height: 24,
-              p: 0.5,
-              m: 0.5,
+              width: { md: 24 },
+              height: { md: 24 },
+              p: { md: 0.5 },
+              m: { md: 0.5 },
             },
           }}
         />
