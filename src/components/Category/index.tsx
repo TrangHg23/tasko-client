@@ -31,6 +31,7 @@ import {
 import { useState } from 'react';
 import CategoryDialog from './CategoryDialog';
 import type { CategoryRequest, ICategory } from '@app-types/category';
+import { NavLink } from 'react-router';
 
 export default function CategoryComponent() {
   const [open, setOpen] = useState(true);
@@ -120,15 +121,26 @@ export default function CategoryComponent() {
           <List component="div" disablePadding>
             {categories?.map((category) => (
               <div key={category.id}>
-                <ListItemButton sx={{ pl: 3, py: { xs: 1, md: 0.5 } }} key={category.id}>
+                <ListItemButton
+                  component={NavLink}
+                  to={`/category/${category.name}~${category.id}`}
+                  sx={{
+                    pl: 3,
+                    py: { xs: 1, md: 0.5 },
+                    '&.active': {
+                      backgroundColor: 'primary.main',
+                      color: '#fff',
+                      '& .MuiListItemIcon-root': { color: 'white' },
+                      '& .MuiIconButton-root': { color: 'white' },
+                    },
+                  }}
+                  key={category.id}
+                >
                   <ListItemText primary={category.name} />
                   <IconButton
                     size="small"
                     onClick={(e) => handleOpenMenu(e, category)}
-                    sx={{
-                      p: 0.5,
-                      color: selectedCategory?.id === category.id ? 'primary.main' : 'gray',
-                    }}
+                    sx={{ p: 0.5 }}
                   >
                     <MoreHoriz />
                   </IconButton>

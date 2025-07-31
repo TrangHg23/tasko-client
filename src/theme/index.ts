@@ -120,8 +120,8 @@ let theme = createTheme(baseTheme, {
             ],
             sx: {
               '& .MuiDateCalendar-root': {
-                width: 270,
-                height: 260,
+                width: { sx: '100%', md: 270 },
+                height: { sx: '100%', md: 296 },
                 fontSize: '0.75rem',
               },
               '& .MuiDayCalendar-day': {
