@@ -12,6 +12,7 @@ import { Auth } from '@pages/index';
 const InboxPage = lazy(() => import('@pages/InboxPage'));
 const TodayPage = lazy(() => import('@pages/TodayPage'));
 const UpcomingPage = lazy(() => import('@pages/UpcomingPage'));
+const CategoryPage = lazy(() => import('@pages/CategoryPage'));
 
 const routesConfig: RouteObject[] = [
   {
@@ -66,6 +67,14 @@ const routesConfig: RouteObject[] = [
             element: (
               <Suspense fallback={<LoadingSpinner />}>
                 <UpcomingPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: 'category/:slug',
+            element: (
+              <Suspense fallback={<LoadingSpinner />}>
+                <CategoryPage />
               </Suspense>
             ),
           },

@@ -15,7 +15,7 @@ export const taskAPI = {
   },
 
   getTasksByDateList: async (params: { dueDates: string[] }) => {
-    const res = await apiClient.get('/tasks', {
+    const res = await apiClient.get('/tasks/due-date-groups', {
       params,
       paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'repeat' }),
     });
