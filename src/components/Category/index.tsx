@@ -45,7 +45,6 @@ export default function CategoryComponent() {
   const { mutateAsync: mutateAsyncDelete } = useDeleteCategory();
 
   const [openDialog, setOpenDialog] = useState(false);
-
   const [selectedCategory, setSelectedCategory] = useState<ICategory | undefined>(undefined);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const openOption = Boolean(anchorEl);
@@ -136,7 +135,13 @@ export default function CategoryComponent() {
                   }}
                   key={category.id}
                 >
-                  <ListItemText primary={category.name} />
+                  <ListItemText
+                    primary={
+                      category.taskCount > 0
+                        ? `${category.name} (${category.taskCount})`
+                        : `${category.name}`
+                    }
+                  />
                   <IconButton
                     size="small"
                     onClick={(e) => handleOpenMenu(e, category)}
