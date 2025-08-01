@@ -33,7 +33,9 @@ export const useAddTask = () => {
     mutationKey: ['addTask'],
     mutationFn: taskAPI.createTask,
     onSuccess: () => {
-      ['tasks', 'taskCount'].forEach((key) => queryClient.invalidateQueries({ queryKey: [key] }));
+      ['tasks', 'taskCount', 'categories'].forEach((key) =>
+        queryClient.invalidateQueries({ queryKey: [key] })
+      );
       enqueueSnackbar('Task added!', { variant: 'success' });
     },
     onError: () => {
@@ -49,7 +51,9 @@ export const usePatchTask = () => {
     mutationKey: ['patchTask'],
     mutationFn: taskAPI.updatePartialTask,
     onSuccess: () => {
-      ['tasks', 'taskCount'].forEach((key) => queryClient.invalidateQueries({ queryKey: [key] }));
+      ['tasks', 'taskCount', 'categories'].forEach((key) =>
+        queryClient.invalidateQueries({ queryKey: [key] })
+      );
     },
     onError: () => {
       enqueueSnackbar('Failed to update task', { variant: 'error' });
@@ -62,7 +66,9 @@ export const useUpdateTask = () => {
     mutationKey: ['updateTask'],
     mutationFn: taskAPI.updateTask,
     onSuccess: () => {
-      ['tasks', 'taskCount'].forEach((key) => queryClient.invalidateQueries({ queryKey: [key] }));
+      ['tasks', 'taskCount', 'categories'].forEach((key) =>
+        queryClient.invalidateQueries({ queryKey: [key] })
+      );
     },
     onError: () => {
       enqueueSnackbar('Faild to update task', { variant: 'error' });
@@ -75,7 +81,9 @@ export const useDeleteTask = () => {
     mutationKey: ['deleteTask'],
     mutationFn: taskAPI.deleteTask,
     onSuccess: () => {
-      ['tasks', 'taskCount'].forEach((key) => queryClient.invalidateQueries({ queryKey: [key] }));
+      ['tasks', 'taskCount', 'categories'].forEach((key) =>
+        queryClient.invalidateQueries({ queryKey: [key] })
+      );
     },
     onError: () => {
       enqueueSnackbar('Faild to delete task', { variant: 'error' });
