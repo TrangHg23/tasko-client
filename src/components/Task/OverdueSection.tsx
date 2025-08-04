@@ -32,6 +32,7 @@ export default function OverdueSection({ overdueTasks, defaultFormValues }: Prop
           defaultFormValues={defaultFormValues}
           allowAdd={false}
           showDueDate={true}
+          showCategory={true}
         />
       )}
     </Box>

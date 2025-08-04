@@ -3,11 +3,25 @@ import {
   Check,
   CheckCircle,
   DeleteOutline,
+  DriveFileMoveOutlined,
   EditOutlined,
   Event,
+  MoreHorizOutlined,
   RadioButtonUnchecked,
 } from '@mui/icons-material';
-import { Box, Checkbox, IconButton, ListItem, Stack, Typography } from '@mui/material';
+import {
+  Box,
+  Checkbox,
+  Chip,
+  IconButton,
+  ListItem,
+  Menu,
+  MenuItem,
+  Stack,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
 import { PRIORITY_META } from '@app-types/enum';
@@ -16,20 +30,28 @@ import { enqueueSnackbar } from 'notistack';
 import { mapTaskToForm } from 'src/utils/task';
 import ConfirmDeleteDialog from './ConfirmDeleteDialog';
 import { format, isBefore, startOfToday } from 'date-fns';
+import CategorySubMenu from './CategorySubMenu';
 
 type TaskItemProps = {
   task: ITask;
   onEdit: (task: SelectedTaskForm) => void;
   showDueDate?: boolean;
+  showCategory?: boolean;
 };
 
-function TaskItem({ task, onEdit, showDueDate }: TaskItemProps) {
+function TaskItem({ task, onEdit, showDueDate, showCategory }: TaskItemProps) {
+  const theme = useTheme();
+  const isSmall = useMediaQuery(theme.breakpoints.down('md'));
   const [checked, setChecked] = useState(false);
   const [visible, setVisible] = useState(true);
   const [openDeleteConfirm, setOpenDeleteConfirm] = useState(false);
   const { mutateAsync } = usePatchTask();
   const { mutateAsync: mutateAsyncDelete } = useDeleteTask();
   const isOverdue = task.dueDate && isBefore(new Date(task.dueDate), startOfToday());
+
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const [subAnchorEl, setSubAnchorEl] = useState<HTMLElement | null>(null);
+  const open = Boolean(anchorEl);
 
   const handleChange = async () => {
     const completeRequest: PatchTaskRequest = {
@@ -49,6 +71,20 @@ function TaskItem({ task, onEdit, showDueDate }: TaskItemProps) {
   const handleDeleteTask = async (id: string) => {
     try {
       await mutateAsyncDelete(id);
+    } catch (e) {
+      console.error('Error: ', e);
+    }
+  };
+
+  const handleCloseCategorySub = async (categoryId?: string | null, categoryName?: string) => {
+    setSubAnchorEl(null);
+    const moveTaskRequest: PatchTaskRequest = {
+      id: task.id,
+      task: { categoryId: categoryId },
+    };
+    try {
+      await mutateAsync(moveTaskRequest);
+      enqueueSnackbar(`Task is moved to ${categoryName ?? 'Inbox'}`, { variant: 'success' });
     } catch (e) {
       console.error('Error: ', e);
     }
@@ -114,64 +150,151 @@ function TaskItem({ task, onEdit, showDueDate }: TaskItemProps) {
                 sx={{
                   justifyContent: 'space-between',
                   width: '100%',
-                  py: 1,
-                  px: 1,
+                  p: 1,
                   '&:hover .hover-buttons': {
                     opacity: 1,
-                    visibility: 'visible',
+                    pointerEvents: 'auto',
+                  },
+                  '&:hover .more-btn': {
+                    opacity: 1,
+                    pointerEvents: 'auto',
+                  },
+                  '&:hover .edit-delete': {
+                    opacity: 1,
+                    pointerEvents: 'auto',
                   },
                 }}
               >
-                <Stack spacing={0.2} justifyContent={'center'}>
-                  <Typography>{task.title}</Typography>
-                  <Typography variant="body2">{task.description}</Typography>
-                  {showDueDate && task.dueDate && (
-                    <Stack
-                      direction="row"
-                      spacing={0.5}
-                      alignItems="center"
-                      sx={{ color: isOverdue ? 'error.main' : '#9C27B0' }}
-                    >
-                      <Event sx={{ fontSize: '13px' }} />
+                <Stack direction={'row'} spacing={2} alignItems={'center'}>
+                  <Stack spacing={0.2}>
+                    <Typography>{task.title}</Typography>
+                    <Typography variant="body2">{task.description}</Typography>
 
-                      <Typography variant="caption">
-                        {format(new Date(task.dueDate), 'MMM dd')}
-                      </Typography>
-                    </Stack>
+                    {showDueDate && task.dueDate && (
+                      <Stack
+                        direction="row"
+                        spacing={0.5}
+                        alignItems="center"
+                        sx={{ color: isOverdue ? 'error.main' : '#9C27B0' }}
+                      >
+                        <Event sx={{ fontSize: '13px' }} />
+                        <Typography variant="caption">
+                          {format(new Date(task.dueDate), 'MMM dd')}
+                        </Typography>
+                      </Stack>
+                    )}
+                  </Stack>
+                  {showCategory && (
+                    <Chip
+                      label={task?.category?.name ?? 'Inbox'}
+                      variant="outlined"
+                      color="primary"
+                      size="small"
+                      sx={{ ml: 1, fontSize: '10px' }}
+                    />
                   )}
                 </Stack>
+
+                {/* actions */}
                 <Stack
                   direction="row"
                   className="hover-buttons"
                   sx={{
-                    opacity: { xs: 1, md: 0 },
-                    visibility: { xs: 'visible', md: 'hidden' },
+                    opacity: 1,
+                    pointerEvents: 'auto',
                     transition: 'opacity 0.2s ease',
                     justifyContent: 'center',
                     alignItems: 'center',
+                    position: 'relative',
+                    ml: 'auto',
                   }}
                 >
+                  {!isSmall && (
+                    <Box
+                      className="edit-delete"
+                      sx={{
+                        opacity: 0,
+                        pointerEvents: 'none',
+                        transition: 'opacity 0.2s',
+                      }}
+                    >
+                      <IconButton
+                        sx={{ padding: '0.25rem', p: { md: 0.5 } }}
+                        onClick={() => onEdit(mapTaskToForm(task))}
+                      >
+                        <EditOutlined />
+                      </IconButton>
+                      <IconButton
+                        sx={{ padding: '0.25rem', p: { md: 0.5 } }}
+                        onClick={() => setOpenDeleteConfirm(true)}
+                      >
+                        <DeleteOutline />
+                      </IconButton>
+                    </Box>
+                  )}
                   <IconButton
-                    sx={{ padding: '0.25rem', p: { xs: 1, md: 0.5 } }}
-                    onClick={() => onEdit(mapTaskToForm(task))}
+                    className={`more-btn ${open ? 'is-active' : ''}`}
+                    onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
+                      setAnchorEl(event.currentTarget);
+                    }}
+                    sx={{
+                      opacity: { xs: 1, md: 0 },
+                      pointerEvents: { xs: 'auto', md: 'none' },
+                      transition: 'opacity 0.2s',
+                      '&.is-active': {
+                        opacity: '1 !important',
+                        pointerEvents: 'auto !important',
+                      },
+                    }}
                   >
-                    <EditOutlined />
+                    <MoreHorizOutlined />
                   </IconButton>
-                  <IconButton
-                    sx={{ padding: '0.25rem', p: { xs: 1, md: 0.5 } }}
-                    onClick={() => setOpenDeleteConfirm(true)}
-                  >
-                    <DeleteOutline />
-                  </IconButton>
-                  <ConfirmDeleteDialog
-                    open={openDeleteConfirm}
-                    handleClose={() => setOpenDeleteConfirm(false)}
-                    onConfirm={() => handleDeleteTask(task.id)}
-                    taskTitle={task.title}
-                  />
                 </Stack>
               </Stack>
             </ListItem>
+
+            <Menu
+              id="option-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={() => setAnchorEl(null)}
+              sx={{ mt: -1 }}
+            >
+              <MenuItem onClick={() => onEdit(mapTaskToForm(task))}>
+                <EditOutlined sx={{ mr: 1 }} />
+                Edit
+              </MenuItem>
+
+              <MenuItem
+                sx={{ '&:hover': { color: 'secondary.main' } }}
+                onClick={(e) => {
+                  setSubAnchorEl(e.currentTarget as HTMLElement);
+                }}
+                disableRipple
+              >
+                <DriveFileMoveOutlined sx={{ mr: 1 }} /> Move task to...
+              </MenuItem>
+
+              <MenuItem onClick={() => setOpenDeleteConfirm(true)} sx={{ color: 'error.main' }}>
+                <DeleteOutline sx={{ mr: 1 }} />
+                Delete
+              </MenuItem>
+            </Menu>
+
+            <ConfirmDeleteDialog
+              open={openDeleteConfirm}
+              handleClose={() => setOpenDeleteConfirm(false)}
+              onConfirm={() => handleDeleteTask(task.id)}
+              taskTitle={task.title}
+            />
+
+            <CategorySubMenu
+              anchorEl={subAnchorEl}
+              onCloseMenu={() => setSubAnchorEl(null)}
+              onSelectCategory={(categoryId, categoryName) => {
+                handleCloseCategorySub(categoryId, categoryName);
+              }}
+            />
           </Box>
         </motion.div>
       )}

@@ -13,6 +13,6 @@ export const PRIORITY_META: Record<
 > = {
   URGENT: { label: 'Urgent', display: 'Priority 1', color: '#dc3545' },
   HIGH: { label: 'High', display: 'Priority 2', color: '#fd7e14' },
-  MEDIUM: { label: 'Medium', display: 'Priority 3', color: '#0d6efd' },
+  MEDIUM: { label: 'Medium', display: 'Priority 3', color: '#009688' },
   LOW: { label: 'Low', display: 'Priority 4', color: '#6c757d' },
 };

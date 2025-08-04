@@ -18,6 +18,7 @@ type TaskListSectionProps = {
   onCloseEditor: () => void;
   allowAdd?: boolean;
   showDueDate?: boolean;
+  showCategory?: boolean;
 };
 
 export default function TaskListSection({
@@ -34,6 +35,7 @@ export default function TaskListSection({
   onCloseEditor,
   allowAdd,
   showDueDate,
+  showCategory,
 }: TaskListSectionProps) {
   return (
     <Box>
@@ -46,7 +48,12 @@ export default function TaskListSection({
       <List disablePadding>
         {tasks?.map((task) => (
           <Box key={task.id}>
-            <TaskItem task={task} onEdit={onEdit} showDueDate={showDueDate} />
+            <TaskItem
+              task={task}
+              onEdit={onEdit}
+              showDueDate={showDueDate}
+              showCategory={showCategory}
+            />
             {selectedTask?.id === task.id && (
               <Box my={1} width="100%" zIndex={1} position="relative" border="1px solid #fff">
                 <TaskEditor
