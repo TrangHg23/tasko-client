@@ -44,6 +44,7 @@ export type PatchTaskDto = {
   dueDate?: string;
   priority?: number;
   isCompleted?: boolean;
+  categoryId?: string | null;
 };
 
 export interface PatchTaskRequest {

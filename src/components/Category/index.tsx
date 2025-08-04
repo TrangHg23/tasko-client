@@ -11,6 +11,7 @@ import {
   EditOutlined,
   ExpandLess,
   ExpandMore,
+  LabelOutlined,
   MoreHoriz,
 } from '@mui/icons-material';
 import {
@@ -92,7 +93,7 @@ export default function CategoryComponent() {
   return (
     <Box sx={{ mt: 5 }}>
       <div>
-        <ListItemButton sx={{ py: 0.5, pl: 3 }}>
+        <ListItemButton sx={{ py: 0.5, pl: 2 }}>
           <Stack
             direction="row"
             alignItems="center"
@@ -135,6 +136,7 @@ export default function CategoryComponent() {
                   }}
                   key={category.id}
                 >
+                  <LabelOutlined sx={{ mr: 1 }} />
                   <ListItemText
                     primary={
                       category.taskCount > 0

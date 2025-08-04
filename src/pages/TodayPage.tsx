@@ -32,6 +32,7 @@ function TodayPage() {
         tasks={todayTasks}
         title="Tasks for Today"
         defaultFormValues={defaultTodayValues}
+        showCategory={true}
       />
     </Container>
   );

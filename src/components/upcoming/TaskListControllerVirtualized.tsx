@@ -10,6 +10,7 @@ type Props = {
   defaultFormValues: TaskFormValues;
   allowAdd?: boolean;
   showDueDate?: boolean;
+  showCategory?: boolean;
   onHeightChange?: () => void;
 };
 
@@ -19,6 +20,7 @@ export default function TaskListControllerVirtualized({
   defaultFormValues,
   allowAdd = true,
   showDueDate,
+  showCategory = true,
   onHeightChange,
 }: Props) {
   const {
@@ -54,6 +56,7 @@ export default function TaskListControllerVirtualized({
       isPendingUpdate={isPendingUpdate}
       allowAdd={allowAdd}
       showDueDate={showDueDate}
+      showCategory={showCategory}
     />
   );
 }

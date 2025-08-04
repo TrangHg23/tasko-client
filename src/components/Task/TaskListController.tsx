@@ -8,6 +8,7 @@ type Props = {
   defaultFormValues: TaskFormValues;
   allowAdd?: boolean;
   showDueDate?: boolean;
+  showCategory?: boolean;
 };
 
 export default function TaskListController({
@@ -16,6 +17,7 @@ export default function TaskListController({
   defaultFormValues,
   allowAdd = true,
   showDueDate,
+  showCategory = false,
 }: Props) {
   const {
     selectedTask,
@@ -43,6 +45,7 @@ export default function TaskListController({
       isPendingUpdate={isPendingUpdate}
       allowAdd={allowAdd}
       showDueDate={showDueDate}
+      showCategory={showCategory}
     />
   );
 }
