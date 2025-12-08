@@ -19,20 +19,21 @@ const apiClient = axios.create({
 
 apiClient.interceptors.request.use(
   (config) => {
-    const skipAuthUrls = ["/auth/login", "/auth/signup", "auth/refresh"];
+    const skipAuthUrls = ['/auth/log-in', '/auth/sign-up', '/auth/refresh'];
     if (skipAuthUrls.some((url) => config.url?.includes(url))) {
-      return config; 
+      return config;
     }
-    
-    const token = localStorage.getItem("access_token")
-    if(token) {
-      config.headers.Authorization = `Bearer ${token}`
+
+    const token = localStorage.getItem('access_token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
-    return config
-  }, (error) => {
-    return Promise.reject(error)
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
   }
-)
+);
 
 let isRefreshing = false;
 let failedQueue: FailedRequest[] = [];
@@ -44,7 +45,7 @@ const processQueue = (error: unknown, token: string | null = null) => {
     } else if (token) {
       prom.resolve(token);
     } else {
-      prom.reject(new Error("No token provided"));
+      prom.reject(new Error('No token provided'));
     }
   });
   failedQueue = [];
@@ -60,7 +61,10 @@ apiClient.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    if (error.response.status === 401 && !originalRequest._retry) {
+    // Skip refresh handling for refresh endpoint itself to avoid loops
+    const isRefreshCall = originalRequest.url?.includes('/auth/refresh');
+
+    if (error.response.status === 401 && !originalRequest._retry && !isRefreshCall) {
       originalRequest._retry = true;
 
       const refreshToken = localStorage.getItem('refresh_token');
@@ -73,20 +77,25 @@ apiClient.interceptors.response.use(
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
-        }).then((token) => {
-          originalRequest.headers.Authorization = `Bearer ${token}`;
-          return apiClient(originalRequest);
-        }).catch((err) => {
-          return Promise.reject(err);
-        });
+        })
+          .then((token) => {
+            originalRequest.headers.Authorization = `Bearer ${token}`;
+            return apiClient(originalRequest);
+          })
+          .catch((err) => {
+            return Promise.reject(err);
+          });
       }
 
       isRefreshing = true;
 
       try {
-        const res = await authAPI.refresh(refreshToken); 
+        const res = await authAPI.refresh(refreshToken);
+        if (!res || !res.accessToken) {
+          throw new Error('Refresh token invalid or expired');
+        }
 
-        let newAccessToken = res.accessToken;
+        const newAccessToken = res.accessToken;
         localStorage.setItem('access_token', newAccessToken);
 
         apiClient.defaults.headers.common['Authorization'] = `Bearer ${newAccessToken}`;
@@ -94,14 +103,14 @@ apiClient.interceptors.response.use(
 
         processQueue(null, newAccessToken);
 
-        return apiClient(originalRequest); 
+        return apiClient(originalRequest);
       } catch (refreshError) {
         console.warn('Refresh token failed:', refreshError);
         processQueue(refreshError, null);
         handleAuthError();
         return Promise.reject(refreshError);
       } finally {
-        isRefreshing = false; 
+        isRefreshing = false;
       }
     }
 
@@ -109,5 +118,4 @@ apiClient.interceptors.response.use(
   }
 );
 
-
-export default apiClient
+export default apiClient;
