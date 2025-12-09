@@ -5,6 +5,9 @@ import LoadingSpinner from '@components/common/LoadingSpinner';
 import LoginForm from '@components/auth/LoginForm';
 import { useLocation } from 'react-router';
 
+const RegisterForm = lazy(() => import('@components/auth/RegisterForm'));
+const ForgotPasswordForm = lazy(() => import('@components/auth/ForgotPassword'));
+
 const variants = {
   initial: { opacity: 0, scale: 0.98, y: 10 },
   animate: { opacity: 1, scale: 1, y: 0 },
@@ -12,11 +15,36 @@ const variants = {
   transition: { duration: 0.25, ease: easeOut },
 };
 
-const RegisterForm = lazy(() => import('@components/auth/RegisterForm'));
-
 export default function Auth() {
-  const location = useLocation();
-  const mode = location.pathname === '/auth/login' ? 'login' : 'signup';
+  const { pathname } = useLocation();
+
+  const mode = (() => {
+    if (pathname.includes('login')) return 'login';
+    if (pathname.includes('signup')) return 'signup';
+    if (pathname.includes('password')) return 'forgot';
+    return 'login';
+  })();
+
+  const renderForm = () => {
+    switch (mode) {
+      case 'login':
+        return <LoginForm />;
+      case 'signup':
+        return (
+          <Suspense fallback={<LoadingSpinner />}>
+            <RegisterForm />
+          </Suspense>
+        );
+      case 'forgot':
+        return (
+          <Suspense fallback={<LoadingSpinner />}>
+            <ForgotPasswordForm />
+          </Suspense>
+        );
+      default:
+        return <LoginForm />;
+    }
+  };
 
   return (
     <Box
@@ -29,31 +57,16 @@ export default function Auth() {
       }}
     >
       <AnimatePresence mode="wait">
-        {mode === 'login' ? (
-          <motion.div
-            key="login"
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            variants={variants}
-            transition={variants.transition}
-          >
-            <LoginForm />
-          </motion.div>
-        ) : (
-          <Suspense fallback={<LoadingSpinner />}>
-            <motion.div
-              key="signup"
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              variants={variants}
-              transition={variants.transition}
-            >
-              <RegisterForm />
-            </motion.div>
-          </Suspense>
-        )}
+        <motion.div
+          key={mode}
+          initial="initial"
+          animate="animate"
+          exit="exit"
+          variants={variants}
+          transition={variants.transition}
+        >
+          {renderForm()}
+        </motion.div>
       </AnimatePresence>
     </Box>
   );

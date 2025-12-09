@@ -35,6 +35,14 @@ const routesConfig: RouteObject[] = [
               </Suspense>
             ),
           },
+          {
+            path: 'password',
+            element: (
+              <Suspense fallback={<LoadingSpinner />}>
+                <Auth />
+              </Suspense>
+            ),
+          },
         ],
       },
     ],
