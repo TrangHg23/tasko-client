@@ -1,19 +1,16 @@
+import type { ForgotPasswordRequest } from '@app-types/auth';
+import { useForgotPassword } from '@hooks/auth/useForgotPassword';
 import { Box, Button, TextField, Typography } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import { Link } from 'react-router';
 
-interface ForgotPasswordRequest {
-  email: string;
-}
-
 export default function ForgotPassword() {
-  const { control, handleSubmit, watch, reset } = useForm<ForgotPasswordRequest>();
+  const { control, handleSubmit, reset } = useForm<ForgotPasswordRequest>();
+  const { isPending, mutateAsync } = useForgotPassword();
 
-  const isValid = !!watch('email')?.trim();
-  const isDisabled = !isValid;
-
-  const handleSubmitEmail = (data: ForgotPasswordRequest) => {
+  const handleSubmitEmail = async (data: ForgotPasswordRequest) => {
     console.log(data);
+    await mutateAsync(data);
     reset({ email: '' });
   };
 
@@ -55,12 +52,21 @@ export default function ForgotPassword() {
           name="email"
           control={control}
           defaultValue=""
-          render={({ field }) => (
+          rules={{
+            required: 'Email is required',
+            pattern: {
+              value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+              message: 'Please enter a valid email address',
+            },
+          }}
+          render={({ field, fieldState: { error } }) => (
             <TextField
               variant="outlined"
               size="small"
               fullWidth
-              placeholder="e.g.username@gmail.com"
+              placeholder="e.g. username@gmail.com"
+              error={!!error}
+              helperText={error?.message ?? ' '}
               {...field}
             />
           )}
@@ -69,25 +75,25 @@ export default function ForgotPassword() {
         <Button
           variant="contained"
           type="submit"
-          disabled={isDisabled}
+          disabled={isPending}
           sx={{
             borderRadius: 20,
             height: { xs: 44, sm: 48, md: 36 },
             fontSize: { xs: '1rem', sm: '0.9375rem', md: '0.875rem' },
-            bgcolor: isDisabled ? '#bbdefb' : 'primary.main',
+            bgcolor: isPending ? '#bbdefb' : 'primary.main',
             color: '#fff',
             '&.Mui-disabled': {
               bgcolor: '#64b5f6',
               color: '#fff',
             },
-            mt: 4,
+            mt: 2.5,
           }}
         >
           Reset my password
         </Button>
 
         <Typography align="center" color="textSecondary" sx={{ mt: { xs: 1, md: 2 } }}>
-          <Box component={Link} to="/auth/signup" sx={{ color: 'primary.main', fontWeight: 500 }}>
+          <Box component={Link} to="/auth/login" sx={{ color: 'primary.main', fontWeight: 500 }}>
             Back to Login
           </Box>
         </Typography>

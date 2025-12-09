@@ -19,3 +19,12 @@ export interface LogoutRequest {
   accessToken: string;
   refreshToken: string;
 }
+
+export interface ForgotPasswordRequest {
+  email: string
+}
+
+export type ForgotPasswordResponse = {
+  status: number;
+  message: string;
+};

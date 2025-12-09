@@ -1,4 +1,4 @@
-import type { LoginRequest, LogoutRequest, RegisterRequest, User } from "@app-types/auth";
+import type { ForgotPasswordRequest, LoginRequest, LogoutRequest, RegisterRequest, User, ForgotPasswordResponse } from "@app-types/auth";
 import apiClient from "@lib/axios";
 
 export const authAPI = {
@@ -24,6 +24,10 @@ export const authAPI = {
     refresh: async(refreshToken: string) => {
         const res = await apiClient.post("/auth/refresh", { refreshToken });
         return res.data;
+    },
+
+    forgotPassword: async(data: ForgotPasswordRequest): Promise<ForgotPasswordResponse> => {
+        return await apiClient.post("/auth/forgot-password", data);
     }
 
 }
