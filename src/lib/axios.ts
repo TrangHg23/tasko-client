@@ -32,6 +32,7 @@ apiClient.interceptors.request.use(
       '/auth/sign-up',
       '/auth/refresh',
       '/auth/forgot-password',
+      '/auth/reset-password',
     ];
     if (skipAuthUrls.some((url) => config.url?.includes(url))) {
       return config;

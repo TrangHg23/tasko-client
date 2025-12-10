@@ -2,6 +2,8 @@ import { Typography, Button, Box, Stack } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import InputField from './InputField';
 import { useState } from 'react';
+import { useResetPassword } from '@hooks/auth/useResetPassword';
+import { useSearchParams } from 'react-router';
 
 type ResetPasswordProps = {
   newPassword: string;
@@ -15,11 +17,24 @@ export default function ResetPassword() {
     watch,
     reset,
   } = useForm<ResetPasswordProps>();
+  const { isPending, mutateAsync } = useResetPassword();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const handleSubmitData = (data: any) => {
-    console.log(data);
+  const [searchParams] = useSearchParams();
+
+  let token = searchParams.get('token');
+
+  if (!token) {
+    return <p>Token is invalid or expired</p>;
+  }
+
+  const handleSubmitData = async (data: ResetPasswordProps) => {
+    const resetPasswordData = {
+      token,
+      newPassword: data.newPassword,
+    };
+    await mutateAsync(resetPasswordData);
     reset();
   };
   return (
@@ -113,12 +128,12 @@ export default function ResetPassword() {
           <Button
             variant="contained"
             type="submit"
-            //   disabled={isPending}
+            disabled={isPending}
             sx={{
               borderRadius: 20,
               height: { xs: 44, sm: 48, md: 36 },
               fontSize: { xs: '1rem', sm: '0.9375rem', md: '0.875rem' },
-              // bgcolor: isPending ? '#bbdefb' : 'primary.main',
+              bgcolor: isPending ? '#bbdefb' : 'primary.main',
               color: '#fff',
               '&.Mui-disabled': {
                 bgcolor: '#64b5f6',

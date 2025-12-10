@@ -41,3 +41,8 @@ export interface RefreshResponse {
   tokenType: string;
   expiresAt: number;
 }
+
+export interface ResetPasswordRequest {
+  token: string;
+  newPassword: string;
+}

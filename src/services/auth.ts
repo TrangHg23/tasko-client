@@ -6,6 +6,7 @@ import type {
   LogoutRequest,
   RefreshResponse,
   RegisterRequest,
+  ResetPasswordRequest,
   User,
 } from '@app-types/auth';
 import apiClient from '@lib/axios';
@@ -24,4 +25,6 @@ export const authAPI = {
 
   forgotPassword: (data: ForgotPasswordRequest) =>
     apiClient.post<ForgotPasswordResponse>('/auth/forgot-password', data),
+
+  resetPassword: (data: ResetPasswordRequest) => apiClient.post('/auth/reset-password', data),
 };
