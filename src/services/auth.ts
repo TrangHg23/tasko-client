@@ -1,33 +1,27 @@
-import type { ForgotPasswordRequest, LoginRequest, LogoutRequest, RegisterRequest, User, ForgotPasswordResponse } from "@app-types/auth";
-import apiClient from "@lib/axios";
+import type {
+  AuthResponse,
+  ForgotPasswordRequest,
+  ForgotPasswordResponse,
+  LoginRequest,
+  LogoutRequest,
+  RefreshResponse,
+  RegisterRequest,
+  User,
+} from '@app-types/auth';
+import apiClient from '@lib/axios';
 
 export const authAPI = {
-    register: async (data: RegisterRequest) => {
-        const res = await apiClient.post("/auth/sign-up", data);
-        return res.data;
-    },
+  register: (data: RegisterRequest) => apiClient.post<User>('/auth/sign-up', data),
 
-    login: async(data: LoginRequest) => {
-        const res = await apiClient.post("/auth/log-in", data);
-        return res.data;
-    },
+  login: (data: LoginRequest) => apiClient.post<AuthResponse>('/auth/log-in', data),
 
-    logout: async(data: LogoutRequest) => {
-        await apiClient.post("/auth/log-out", data);
-    },
+  logout: (data: LogoutRequest) => apiClient.post('/auth/log-out', data),
 
-    fetchUser: async () : Promise<User> => {
-        const res = await apiClient.get("/auth/me")
-        return res.data;
-    },
-    
-    refresh: async(refreshToken: string) => {
-        const res = await apiClient.post("/auth/refresh", { refreshToken });
-        return res.data;
-    },
+  fetchUser: () => apiClient.get<User>('/auth/me'),
 
-    forgotPassword: async(data: ForgotPasswordRequest): Promise<ForgotPasswordResponse> => {
-        return await apiClient.post("/auth/forgot-password", data);
-    }
+  refresh: (refreshToken: string) =>
+    apiClient.post<RefreshResponse>('/auth/refresh', { refreshToken }),
 
-}
+  forgotPassword: (data: ForgotPasswordRequest) =>
+    apiClient.post<ForgotPasswordResponse>('/auth/forgot-password', data),
+};

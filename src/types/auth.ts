@@ -4,6 +4,12 @@ export interface User {
   name: string;
 }
 
+export interface AuthResponse {
+  accessToken: string;
+  refreshToken: string;
+  user: User;
+}
+
 export interface RegisterRequest {
   name: string;
   email: string;
@@ -21,10 +27,17 @@ export interface LogoutRequest {
 }
 
 export interface ForgotPasswordRequest {
-  email: string
+  email: string;
 }
 
 export type ForgotPasswordResponse = {
   status: number;
   message: string;
 };
+
+export interface RefreshResponse {
+  authenticated: boolean;
+  accessToken: string;
+  tokenType: string;
+  expiresAt: number;
+}
