@@ -9,40 +9,21 @@ import apiClient from '@lib/axios';
 import qs from 'qs';
 
 export const taskAPI = {
-  getTasks: async (params: GetTasksParams) => {
-    const res = await apiClient.get('/tasks', { params });
-    return res.data;
-  },
+  getTasks: (params: GetTasksParams) => apiClient.get('/tasks', { params }),
 
-  getTasksByDateList: async (params: { dueDates: string[] }) => {
-    const res = await apiClient.get('/tasks/due-date-groups', {
+  getTasksByDateList: (params: { dueDates: string[] }) =>
+    apiClient.get('/tasks/due-date-groups', {
       params,
       paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'repeat' }),
-    });
-    return res.data as Record<string, ITask[]>;
-  },
+    }) as Promise<Record<string, ITask[]>>,
 
-  createTask: async (data: TaskRequest) => {
-    const res = await apiClient.post('/tasks', data);
-    return res.data;
-  },
+  createTask: (data: TaskRequest) => apiClient.post('/tasks', data),
 
-  updatePartialTask: async (data: PatchTaskRequest) => {
-    const res = await apiClient.patch(`/tasks/${data.id}`, data.task);
-    return res.data;
-  },
+  updatePartialTask: (data: PatchTaskRequest) => apiClient.patch(`/tasks/${data.id}`, data.task),
 
-  updateTask: async (data: UpdateTaskRequest) => {
-    const res = await apiClient.put(`tasks/${data.id}`, data.task);
-    return res.data;
-  },
+  updateTask: (data: UpdateTaskRequest) => apiClient.put(`/tasks/${data.id}`, data.task),
 
-  deleteTask: async (id: string) => {
-    return await apiClient.delete(`tasks/${id}`);
-  },
+  deleteTask: (id: string) => apiClient.delete(`/tasks/${id}`),
 
-  countTask: async () => {
-    const res = await apiClient.get(`tasks/count`);
-    return res.data;
-  },
+  countTask: () => apiClient.get('/tasks/count'),
 };

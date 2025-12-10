@@ -1,23 +1,13 @@
-import type { CategoryRequest, UpdateCategoryRequest } from '@app-types/category';
+import type { CategoryRequest, ICategory, UpdateCategoryRequest } from '@app-types/category';
 import apiClient from '@lib/axios';
 
 export const categoryAPI = {
-  getAllCategories: async () => {
-    const res = await apiClient.get('/categories');
-    return res.data;
-  },
+  getAllCategories: () => apiClient.get<ICategory[]>('/categories'),
 
-  addCategory: async (data: CategoryRequest) => {
-    const res = await apiClient.post('/categories', data);
-    return res.data;
-  },
+  addCategory: (data: CategoryRequest) => apiClient.post('/categories', data),
 
-  updateCategory: async (data: UpdateCategoryRequest) => {
-    const res = await apiClient.put(`/categories/${data.id}`, data.category);
-    return res.data;
-  },
+  updateCategory: (data: UpdateCategoryRequest) =>
+    apiClient.put(`/categories/${data.id}`, data.category),
 
-  deleteCategory: async (id: string) => {
-    await apiClient.delete(`/categories/${id}`);
-  },
+  deleteCategory: (id: string) => apiClient.delete(`/categories/${id}`),
 };

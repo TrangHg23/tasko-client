@@ -1,4 +1,5 @@
-import axios from 'axios';
+//axios.ts
+import axios, { type AxiosInstance, type AxiosRequestConfig } from 'axios';
 import { authAPI } from 'src/services/auth';
 import { handleAuthError } from 'src/utils/auth';
 
@@ -9,17 +10,26 @@ type FailedRequest = {
 
 const API_BASE_URL = import.meta.env.VITE_BACKEND || 'http://localhost:8080';
 
+interface TypedAxiosInstance extends AxiosInstance {
+  get<T = any>(url: string, config?: AxiosRequestConfig): Promise<T>;
+  post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T>;
+  put<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T>;
+  patch<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T>;
+  delete<T = any>(url: string, config?: AxiosRequestConfig): Promise<T>;
+}
+
+
 const apiClient = axios.create({
   baseURL: `${API_BASE_URL}/api`,
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
   },
-});
+}) as TypedAxiosInstance;
 
 apiClient.interceptors.request.use(
   (config) => {
-    const skipAuthUrls = ['/auth/log-in', '/auth/sign-up', '/auth/refresh'];
+    const skipAuthUrls = ['/auth/log-in', '/auth/sign-up', '/auth/refresh', '/auth/forgot-password'];
     if (skipAuthUrls.some((url) => config.url?.includes(url))) {
       return config;
     }
@@ -53,7 +63,13 @@ const processQueue = (error: unknown, token: string | null = null) => {
 
 apiClient.interceptors.response.use(
   (response) => {
-    return response.data;
+    const outer = response.data;
+
+    if (outer && typeof outer === 'object' && 'data' in outer) {
+      return outer.data;
+    }
+
+    return outer;
   },
   async (error) => {
     const originalRequest = error.config;
