@@ -7,6 +7,7 @@ import { useLocation } from 'react-router';
 
 const RegisterForm = lazy(() => import('@components/auth/RegisterForm'));
 const ForgotPasswordForm = lazy(() => import('@components/auth/ForgotPassword'));
+const ResetPasswordForm = lazy(() => import('@components/auth/ResetPassword'));
 
 const variants = {
   initial: { opacity: 0, scale: 0.98, y: 10 },
@@ -21,7 +22,8 @@ export default function Auth() {
   const mode = (() => {
     if (pathname.includes('login')) return 'login';
     if (pathname.includes('signup')) return 'signup';
-    if (pathname.includes('password')) return 'forgot';
+    if (pathname.includes('forgot-password')) return 'forgot';
+    if (pathname.includes('reset-password')) return 'reset';
     return 'login';
   })();
 
@@ -41,6 +43,13 @@ export default function Auth() {
             <ForgotPasswordForm />
           </Suspense>
         );
+      case 'reset':
+        return (
+          <Suspense fallback={<LoadingSpinner/>}>
+            <ResetPasswordForm/>
+          </Suspense>
+        )
+      
       default:
         return <LoginForm />;
     }

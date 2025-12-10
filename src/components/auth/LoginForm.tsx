@@ -61,7 +61,7 @@ function LoginForm() {
         }}
         onSubmit={handleSubmit(handleLogin)}
       >
-        <Stack gap={0.5}>
+        <Stack spacing={1}>
           <Controller
             name="email"
             control={control}
@@ -87,7 +87,7 @@ function LoginForm() {
             )}
           />
 
-          <Stack gap={0}>
+          <Stack spacing={0}>
             <Controller
               name="password"
               control={control}
@@ -114,7 +114,7 @@ function LoginForm() {
 
             <Box
               component={Link}
-              to="/auth/password"
+              to="/auth/forgot-password"
               sx={{
                 display: 'inline-block',
                 width: 'fit-content',
