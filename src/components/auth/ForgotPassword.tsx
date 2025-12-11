@@ -9,7 +9,6 @@ export default function ForgotPassword() {
   const { isPending, mutateAsync } = useForgotPassword();
 
   const handleSubmitEmail = async (data: ForgotPasswordRequest) => {
-    console.log(data);
     await mutateAsync(data);
     reset({ email: '' });
   };
