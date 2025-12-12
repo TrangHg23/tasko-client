@@ -3,6 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router';
 import { authAPI } from 'src/services/auth';
+import { handleApiError } from 'src/utils/handleApiError';
 import { setTokens } from 'src/utils/token';
 
 export const useResetPassword = () => {
@@ -17,8 +18,8 @@ export const useResetPassword = () => {
       queryClient.invalidateQueries({ queryKey: ['user'] });
       navigate('/today');
     },
-    onError: () => {
-      enqueueSnackbar('Something went wrong!', { variant: 'error' });
+    onError: (error) => {
+      handleApiError(error, [1014, 1015]);
     },
   });
 };
