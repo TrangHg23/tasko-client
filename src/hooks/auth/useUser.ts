@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getAccessToken } from "src/utils/token";
 import { authAPI } from "src/services/auth";
 import type { User } from "@app-types/auth";
-import isAxiosError from "@app-types/error";
+import { isAxiosError } from "src/utils/isAxiosError";
 
 export const useUser = () => {
     const token = getAccessToken();

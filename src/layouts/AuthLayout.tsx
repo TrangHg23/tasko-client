@@ -84,7 +84,17 @@ const AuthLayout = () => {
             <BrandLogo />
           </Box>
 
-          <Outlet />
+          <Box
+            sx={{
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              minWidth: 360,
+            }}
+          >
+            <Outlet />
+          </Box>
         </Box>
       </Paper>
     </Box>

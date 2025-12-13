@@ -87,29 +87,48 @@ function LoginForm() {
             )}
           />
 
-          <Controller
-            name="password"
-            control={control}
-            defaultValue=""
-            rules={{
-              required: 'Password is required',
-              minLength: { value: 8, message: 'Password must be at least 8 characters' },
-            }}
-            render={({ field }) => (
-              <InputField
-                type={showPassword ? 'text' : 'password'}
-                autoComplete="current-password"
-                label="Password"
-                value={field.value}
-                onChange={field.onChange}
-                onBlur={field.onBlur}
-                error={!!errors.password}
-                helperText={errors.password?.message || ' '}
-                showPasswordToggle
-                onTogglePassword={() => setShowPassword((prev) => !prev)}
-              />
-            )}
-          />
+          <Stack spacing={0}>
+            <Controller
+              name="password"
+              control={control}
+              defaultValue=""
+              rules={{
+                required: 'Password is required',
+                minLength: { value: 8, message: 'Password must be at least 8 characters' },
+              }}
+              render={({ field }) => (
+                <InputField
+                  type={showPassword ? 'text' : 'password'}
+                  autoComplete="current-password"
+                  label="Password"
+                  value={field.value}
+                  onChange={field.onChange}
+                  onBlur={field.onBlur}
+                  error={!!errors.password}
+                  helperText={errors.password?.message || ' '}
+                  showPasswordToggle
+                  onTogglePassword={() => setShowPassword((prev) => !prev)}
+                />
+              )}
+            />
+
+            <Box
+              component={Link}
+              to="/auth/forgot-password"
+              sx={{
+                display: 'inline-block',
+                width: 'fit-content',
+                ml: 'auto',
+                mt: -0.5,
+                color: 'primary.main',
+                textAlign: 'right',
+                fontWeight: 500,
+                fontSize: '0.75rem',
+              }}
+            >
+              Forgot password?
+            </Box>
+          </Stack>
 
           <Button
             type="submit"

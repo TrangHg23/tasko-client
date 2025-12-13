@@ -23,18 +23,10 @@ const routesConfig: RouteObject[] = [
       {
         element: <AuthLayout />,
         children: [
-          {
-            path: 'login',
-            element: <Auth />,
-          },
-          {
-            path: 'signup',
-            element: (
-              <Suspense fallback={<LoadingSpinner />}>
-                <Auth />
-              </Suspense>
-            ),
-          },
+          { path: 'login', element: <Auth /> },
+          { path: 'signup', element: <Auth /> },
+          { path: 'forgot-password', element: <Auth /> },
+          { path: 'reset-password', element: <Auth /> },
         ],
       },
     ],

@@ -47,7 +47,7 @@ const InputField = ({
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton onClick={onTogglePassword} edge="end">
-                    {type === 'password' ? <VisibilityOff /> : <Visibility />}
+                    {type.includes('password') ? <VisibilityOff /> : <Visibility />}
                   </IconButton>
                 </InputAdornment>
               ),
