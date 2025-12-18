@@ -8,6 +8,7 @@ import ErrorBoundary from '@components/errors/ErrorBoundary';
 import NotFound from '@components/errors/NotFound';
 import PrivateRoute from './PrivateRoute';
 import { Auth } from '@pages/index';
+import { useForegroundNotifications } from '@hooks/notifications/useForegroundNotifications';
 
 const InboxPage = lazy(() => import('@pages/InboxPage'));
 const TodayPage = lazy(() => import('@pages/TodayPage'));
@@ -88,6 +89,7 @@ const routesConfig: RouteObject[] = [
 const router = createBrowserRouter(routesConfig);
 
 const AppRouter = () => {
+  useForegroundNotifications()
   return (
     <Suspense fallback={<LoadingSpinner />}>
       <RouterProvider router={router} />
