@@ -101,6 +101,7 @@ export const useTaskDefaults = (ctx?: TaskDefaultsContext) => {
     title: '',
     description: '',
     dueDate: null,
+    dueTime: null,
     priority: PriorityLevel.LOW,
   };
 

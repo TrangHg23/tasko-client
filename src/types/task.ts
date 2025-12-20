@@ -26,6 +26,7 @@ export interface TaskFormValues {
   title: string;
   description?: string;
   dueDate?: Date | null;
+  dueTime?: string | null;
   priority: PriorityLevel;
   categoryId?: string;
 }
@@ -33,7 +34,7 @@ export interface TaskFormValues {
 export interface TaskRequest {
   title: string;
   description?: string;
-  dueDate?: string | null;
+  dueAt?: string | null;
   priority: PriorityLevel;
   categoryId?: string;
 }

@@ -1,22 +1,12 @@
 import type { SelectedTaskForm, TaskFormValues, TaskRequest } from '@app-types/task';
-import { AccessAlarm, Clear, Flag } from '@mui/icons-material';
-import {
-  Box,
-  Button,
-  Divider,
-  IconButton,
-  Menu,
-  MenuItem,
-  Paper,
-  Stack,
-  TextField,
-} from '@mui/material';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { AccessAlarm, Flag } from '@mui/icons-material';
+import { Box, Button, Divider, Menu, MenuItem, Paper, Stack, TextField } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
-import { format, startOfToday } from 'date-fns';
+import { format } from 'date-fns';
 import { useEffect, useState } from 'react';
 import { PRIORITY_META, PriorityLevel } from '@app-types/enum';
 import { useReminder } from '@hooks/notifications/useReminder';
+import DateTimePickerButton from './DateTimePickerButton';
 
 type TaskEditorProps = {
   defaultFormValues: TaskFormValues;
@@ -58,12 +48,28 @@ function TaskEditor({
   const handleClose = () => setAnchorEl(null);
 
   const handleSubmitTaskData = (data: TaskFormValues) => {
-    const submittedData = {
+    console.log('Submitting task data:', data);
+
+    let dueAt: string | null = null;
+
+    if (data.dueDate) {
+      if (data.dueTime) {
+        const [hours, minutes] = data.dueTime.split(':').map(Number);
+        const combined = new Date(data.dueDate);
+        combined.setHours(hours, minutes, 0, 0);
+
+        dueAt = combined.toISOString();
+      } else {
+        dueAt = format(data.dueDate, 'yyyy-MM-dd');
+      }
+    }
+
+    onSubmit({
       ...data,
-      dueDate: data.dueDate ? format(data.dueDate, 'yyyy-MM-dd') : null,
-    };
-    onSubmit(submittedData);
-    reset();
+      dueAt,
+    });
+
+    reset(defaultFormValues);
   };
 
   return (
@@ -103,7 +109,6 @@ function TaskEditor({
           <Controller
             name="description"
             control={control}
-            defaultValue=""
             render={({ field }) => (
               <TextField
                 variant="standard"
@@ -122,44 +127,19 @@ function TaskEditor({
               control={control}
               name="dueDate"
               render={({ field }) => (
-                <DatePicker
-                  {...field}
-                  onChange={(date) => field.onChange(date)}
-                  enableAccessibleFieldDOMStructure={false}
-                  value={field.value}
-                  format="d MMM"
-                  minDate={startOfToday()}
-                  sx={{
-                    width: 75,
-                    '& input': {
-                      padding: '0.25rem',
-                      fontSize: '0.75rem',
-                    },
-                    '& .MuiInputBase-root': {
-                      padding: 0,
-                      fontSize: '0.75rem',
-                    },
-                    '& .MuiSvgIcon-root': {
-                      fontSize: '18px',
-                    },
-                    '& .MuiIconButton-root': {
-                      padding: 0,
-                      marginRight: '0.5rem',
-                    },
-                  }}
-                  slotProps={{
-                    textField: {
-                      size: 'small',
-                      variant: 'outlined',
-                      InputProps: {
-                        endAdornment: field.value ? (
-                          <IconButton size="small" onClick={() => field.onChange(null)} edge="end">
-                            <Clear fontSize="small" />
-                          </IconButton>
-                        ) : null,
-                      },
-                    },
-                  }}
+                <Controller
+                  control={control}
+                  name="dueTime"
+                  render={({ field: timeField }) => (
+                    <DateTimePickerButton
+                      date={field.value ?? null}
+                      time={timeField.value ?? null}
+                      onChange={(date, time) => {
+                        field.onChange(date);
+                        timeField.onChange(time);
+                      }}
+                    />
+                  )}
                 />
               )}
             />
