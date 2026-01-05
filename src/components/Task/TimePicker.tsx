@@ -44,7 +44,7 @@ const getNearestFutureTime = (): Date => {
 
 type TimePickerProps = {
   value: string | null; // "HH:mm"
-  onChange: (time: string) => void;
+  onChange: (time: string | null) => void;
   selectedDate?: Date | null;
 };
 

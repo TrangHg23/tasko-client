@@ -1,12 +1,12 @@
 import type { SelectedTaskForm, TaskFormValues, TaskRequest } from '@app-types/task';
 import { AccessAlarm, Flag } from '@mui/icons-material';
 import { Box, Button, Divider, Menu, MenuItem, Paper, Stack, TextField } from '@mui/material';
-import { Controller, useForm } from 'react-hook-form';
-import { format } from 'date-fns';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 import { useEffect, useState } from 'react';
 import { PRIORITY_META, PriorityLevel } from '@app-types/enum';
 import { useReminder } from '@hooks/notifications/useReminder';
 import DateTimePickerButton from './DateTimePickerButton';
+import { convertFormToTaskRequest } from 'src/utils/task';
 
 type TaskEditorProps = {
   defaultFormValues: TaskFormValues;
@@ -23,7 +23,7 @@ function TaskEditor({
   onSubmit,
   isPending,
 }: TaskEditorProps) {
-  const { control, handleSubmit, watch, reset } = useForm<TaskFormValues>({
+  const { control, handleSubmit, watch, reset, setValue } = useForm<TaskFormValues>({
     defaultValues: defaultFormValues,
   });
 
@@ -48,27 +48,8 @@ function TaskEditor({
   const handleClose = () => setAnchorEl(null);
 
   const handleSubmitTaskData = (data: TaskFormValues) => {
-    console.log('Submitting task data:', data);
-
-    let dueAt: string | null = null;
-
-    if (data.dueDate) {
-      if (data.dueTime) {
-        const [hours, minutes] = data.dueTime.split(':').map(Number);
-        const combined = new Date(data.dueDate);
-        combined.setHours(hours, minutes, 0, 0);
-
-        dueAt = combined.toISOString();
-      } else {
-        dueAt = format(data.dueDate, 'yyyy-MM-dd');
-      }
-    }
-
-    onSubmit({
-      ...data,
-      dueAt,
-    });
-
+    const taskRequest = convertFormToTaskRequest(data);
+    onSubmit(taskRequest);
     reset(defaultFormValues);
   };
 
@@ -126,22 +107,22 @@ function TaskEditor({
             <Controller
               control={control}
               name="dueDate"
-              render={({ field }) => (
-                <Controller
-                  control={control}
-                  name="dueTime"
-                  render={({ field: timeField }) => (
-                    <DateTimePickerButton
-                      date={field.value ?? null}
-                      time={timeField.value ?? null}
-                      onChange={(date, time) => {
-                        field.onChange(date);
-                        timeField.onChange(time);
-                      }}
-                    />
-                  )}
-                />
-              )}
+              render={({ field }) => {
+                const dueTime = useWatch({ control, name: 'dueTime' });
+                return (
+                  <DateTimePickerButton
+                    date={field.value ?? null}
+                    time={dueTime ?? null}
+                    onChange={(date, time) => {
+                      field.onChange(date);
+                      setValue('dueTime', time);
+                      if (!date) setValue('dueType', 'NONE');
+                      else if (date && time) setValue('dueType', 'DATE_TIME');
+                      else setValue('dueType', 'DATE');
+                    }}
+                  />
+                );
+              }}
             />
 
             <Controller

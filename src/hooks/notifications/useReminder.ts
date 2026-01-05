@@ -7,6 +7,7 @@ export const useReminder = () => {
   const [isPermissionGranted, setIsPermissionGranted] = useState(
     Notification.permission === 'granted'
   );
+  const [reminderDialogOpen, setReminderDialogOpen] = useState(false);
 
   const handleReminderClick = async () => {
     try {
@@ -43,8 +44,9 @@ export const useReminder = () => {
   };
 
   const openReminderDialog = () => {
+    setReminderDialogOpen(true);
     // open reminder picker
   };
 
-  return { handleReminderClick, isPermissionGranted };
+  return { handleReminderClick, isPermissionGranted, reminderDialogOpen, setReminderDialogOpen };
 };

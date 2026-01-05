@@ -43,14 +43,10 @@ function DateTimePickerButton({ date, time, onChange }: DateTimePickerButtonProp
   const handleDialogClose = () => {
     setDialogOpen(false);
     setTimePickerOpen(false);
-    // Reset temp values on close
-    setTempDate(null);
-    setTempTime(null);
   };
 
   const handleSave = () => {
-    if (!tempDate) return;
-    onChange(tempDate, tempTime);
+    onChange(tempDate, tempDate ? tempTime : null);
     handleDialogClose();
   };
 
@@ -103,18 +99,13 @@ function DateTimePickerButton({ date, time, onChange }: DateTimePickerButtonProp
                   value={tempDate}
                   minDate={startOfToday()}
                   onChange={(newDate) => {
-                    if (newDate) {
-                      setTempDate(newDate);
+                    setTempDate(newDate);
+                    if (!newDate) {
+                      setTempTime(null);
                     }
                   }}
                   views={['day']}
                   showDaysOutsideCurrentMonth
-                  sx={{
-                    '& .MuiPickersDay-today:not(.Mui-selected)': {
-                      border: tempDate ? '1px solid' : '1px dashed rgba(0, 0, 0, 0.2)',
-                      backgroundColor: 'transparent',
-                    },
-                  }}
                 />
 
                 <Divider />
