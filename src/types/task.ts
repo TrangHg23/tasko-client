@@ -13,9 +13,9 @@ export interface ITask {
   isCompleted: boolean;
   completedAt?: string | null;
   category?: ICategory | null;
-  isInboxTask: boolean;
-  isTodayTask: boolean;
-  isOverdue: boolean;
+  inboxTask: boolean;
+  todayTask: boolean;
+  overdue: boolean;
 }
 
 export interface GetTasksParams {

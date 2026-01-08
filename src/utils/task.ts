@@ -1,5 +1,5 @@
 import type { ITask, SelectedTaskForm, TaskFormValues, TaskRequest } from '@app-types/task';
-import { parseISO } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 
 export function convertFormToTaskRequest(form: TaskFormValues): TaskRequest {
   const taskRequest: TaskRequest = {
@@ -23,13 +23,28 @@ const formatLocalDate = (date: Date): string => {
   return `${year}-${month}-${day}`;
 };
 
-export function mapTaskToForm(task: ITask): SelectedTaskForm {
+export const mapTaskToForm = (task: ITask): SelectedTaskForm => {
+  let dueDate: Date | null = null;
+  let dueTime: string | null = null;
+
+  if (task.dueType === 'DATE_TIME' && task.dueDateTime) {
+    const dateTime = parseISO(task.dueDateTime);
+
+    dueDate = dateTime;
+    dueTime = format(dateTime, 'HH:mm');
+  } else if (task.dueDate) {
+    dueDate = parseISO(task.dueDate);
+    dueTime = null;
+  }
+
   return {
     id: task.id,
     title: task.title,
     description: task.description,
-    dueDate: task.dueDate ? parseISO(task.dueDate) : null,
+    dueType: task.dueType,
+    dueDate,
+    dueTime,
     priority: task.priority,
     categoryId: task.category?.id,
   };
-}
+};

@@ -29,7 +29,7 @@ import { useDeleteTask, usePatchTask } from '@hooks/useTask';
 import { enqueueSnackbar } from 'notistack';
 import { mapTaskToForm } from 'src/utils/task';
 import ConfirmDeleteDialog from './ConfirmDeleteDialog';
-import { format, isBefore, startOfToday } from 'date-fns';
+import { format } from 'date-fns';
 import CategorySubMenu from './CategorySubMenu';
 import { formatVnTime } from 'src/utils/times';
 
@@ -48,7 +48,6 @@ function TaskItem({ task, onEdit, showDueDate, showCategory }: TaskItemProps) {
   const [openDeleteConfirm, setOpenDeleteConfirm] = useState(false);
   const { mutateAsync } = usePatchTask();
   const { mutateAsync: mutateAsyncDelete } = useDeleteTask();
-  const isOverdue = task.dueDate && isBefore(new Date(task.dueDate), startOfToday());
 
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [subAnchorEl, setSubAnchorEl] = useState<HTMLElement | null>(null);
@@ -173,7 +172,7 @@ function TaskItem({ task, onEdit, showDueDate, showCategory }: TaskItemProps) {
                     <Stack
                       direction="row"
                       spacing={0.5}
-                      sx={{ color: isOverdue ? 'error.main' : '#9C27B0' }}
+                      sx={{ color: task.overdue ? 'error.main' : '#9C27B0' }}
                     >
                       {showDueDate && task.dueDate && (
                         <Stack direction="row" spacing={0.5} alignItems="center">

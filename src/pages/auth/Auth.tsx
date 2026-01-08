@@ -1,4 +1,4 @@
-import { motion, AnimatePresence, easeOut } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Box } from '@mui/material';
 import { lazy, Suspense } from 'react';
 import LoadingSpinner from '@components/common/LoadingSpinner';
@@ -13,7 +13,7 @@ const variants = {
   initial: { opacity: 0, scale: 0.98, y: 10 },
   animate: { opacity: 1, scale: 1, y: 0 },
   exit: { opacity: 0, scale: 0.98, y: -10 },
-  transition: { duration: 0.25, ease: easeOut },
+  transition: { duration: 0.25, ease: 'easeOut' },
 };
 
 export default function Auth() {
@@ -45,11 +45,11 @@ export default function Auth() {
         );
       case 'reset':
         return (
-          <Suspense fallback={<LoadingSpinner/>}>
-            <ResetPasswordForm/>
+          <Suspense fallback={<LoadingSpinner />}>
+            <ResetPasswordForm />
           </Suspense>
-        )
-      
+        );
+
       default:
         return <LoginForm />;
     }
