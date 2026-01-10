@@ -31,7 +31,7 @@ import { mapTaskToForm } from 'src/utils/task';
 import ConfirmDeleteDialog from './ConfirmDeleteDialog';
 import { format } from 'date-fns';
 import CategorySubMenu from './CategorySubMenu';
-import { formatVnTime } from 'src/utils/times';
+import { formatVnTime, isTaskExpired } from 'src/utils/times';
 
 type TaskItemProps = {
   task: ITask;
@@ -172,7 +172,12 @@ function TaskItem({ task, onEdit, showDueDate, showCategory }: TaskItemProps) {
                     <Stack
                       direction="row"
                       spacing={0.5}
-                      sx={{ color: task.overdue ? 'error.main' : '#9C27B0' }}
+                      sx={{
+                        color:
+                          task.overdue || isTaskExpired(task.dueDateTime)
+                            ? 'error.main'
+                            : '#9C27B0',
+                      }}
                     >
                       {showDueDate && task.dueDate && (
                         <Stack direction="row" spacing={0.5} alignItems="center">
