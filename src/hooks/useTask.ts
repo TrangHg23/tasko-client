@@ -1,6 +1,12 @@
 import { PriorityLevel } from '@app-types/enum';
 import { taskAPI } from './../services/task';
-import type { GetTasksParams, ITask, SelectedTaskForm, TaskRequest } from '@app-types/task';
+import type {
+  GetTasksParams,
+  ITask,
+  SelectedTaskForm,
+  TaskFormValues,
+  TaskRequest,
+} from '@app-types/task';
 import { queryClient } from '@lib/queryClient';
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
@@ -93,33 +99,42 @@ export const useDeleteTask = () => {
 
 type TaskDefaultsContext =
   | { context: 'inbox' }
-  | { context: 'dueDate'; dueDate: Date }
+  | { context: 'dueDate'; dueDate: Date; dueTime?: string }
   | { context: 'category'; categoryId: string };
 
 export const useTaskDefaults = (ctx?: TaskDefaultsContext) => {
-  const baseDefaults = {
+  const baseDefaults: TaskFormValues = {
     title: '',
     description: '',
+    dueType: 'NONE',
     dueDate: null,
+    dueTime: null,
     priority: PriorityLevel.LOW,
   };
 
+  let defaults = { ...baseDefaults };
+
   switch (ctx?.context) {
     case 'inbox':
-      return baseDefaults;
+      break;
     case 'dueDate':
-      return {
-        ...baseDefaults,
-        dueDate: ctx.dueDate ?? null,
-      };
+      defaults.dueDate = ctx.dueDate ?? null;
+      defaults.dueTime = ctx.dueTime ?? null;
+      break;
     case 'category':
-      return {
-        ...baseDefaults,
-        categoryId: ctx.categoryId,
-      };
-    default:
-      return baseDefaults;
+      defaults.categoryId = ctx.categoryId;
+      break;
   }
+
+  if (defaults.dueDate && defaults.dueTime) {
+    defaults.dueType = 'DATE_TIME';
+  } else if (defaults.dueDate) {
+    defaults.dueType = 'DATE';
+  } else {
+    defaults.dueType = 'NONE';
+  }
+
+  return defaults;
 };
 
 export const useTaskEditor = () => {

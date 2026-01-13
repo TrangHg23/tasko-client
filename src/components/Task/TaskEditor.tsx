@@ -1,21 +1,12 @@
 import type { SelectedTaskForm, TaskFormValues, TaskRequest } from '@app-types/task';
-import { Clear, Flag } from '@mui/icons-material';
-import {
-  Box,
-  Button,
-  Divider,
-  IconButton,
-  Menu,
-  MenuItem,
-  Paper,
-  Stack,
-  TextField,
-} from '@mui/material';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { Controller, useForm } from 'react-hook-form';
-import { format, startOfToday } from 'date-fns';
+import { AccessAlarm, Flag } from '@mui/icons-material';
+import { Box, Button, Divider, Menu, MenuItem, Paper, Stack, TextField } from '@mui/material';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 import { useEffect, useState } from 'react';
 import { PRIORITY_META, PriorityLevel } from '@app-types/enum';
+import { useReminder } from '@hooks/notifications/useReminder';
+import DateTimePickerButton from './DateTimePickerButton';
+import { convertFormToTaskRequest } from 'src/utils/task';
 
 type TaskEditorProps = {
   defaultFormValues: TaskFormValues;
@@ -32,9 +23,11 @@ function TaskEditor({
   onSubmit,
   isPending,
 }: TaskEditorProps) {
-  const { control, handleSubmit, watch, reset } = useForm<TaskFormValues>({
+  const { control, handleSubmit, watch, reset, setValue } = useForm<TaskFormValues>({
     defaultValues: defaultFormValues,
   });
+
+  const { handleReminderClick } = useReminder();
 
   useEffect(() => {
     if (initialData) {
@@ -55,12 +48,9 @@ function TaskEditor({
   const handleClose = () => setAnchorEl(null);
 
   const handleSubmitTaskData = (data: TaskFormValues) => {
-    const submittedData = {
-      ...data,
-      dueDate: data.dueDate ? format(data.dueDate, 'yyyy-MM-dd') : null,
-    };
-    onSubmit(submittedData);
-    reset();
+    const taskRequest = convertFormToTaskRequest(data);
+    onSubmit(taskRequest);
+    reset(defaultFormValues);
   };
 
   return (
@@ -100,7 +90,6 @@ function TaskEditor({
           <Controller
             name="description"
             control={control}
-            defaultValue=""
             render={({ field }) => (
               <TextField
                 variant="standard"
@@ -118,47 +107,22 @@ function TaskEditor({
             <Controller
               control={control}
               name="dueDate"
-              render={({ field }) => (
-                <DatePicker
-                  {...field}
-                  onChange={(date) => field.onChange(date)}
-                  enableAccessibleFieldDOMStructure={false}
-                  value={field.value}
-                  format="d MMM"
-                  minDate={startOfToday()}
-                  sx={{
-                    width: 75,
-                    '& input': {
-                      padding: '0.25rem',
-                      fontSize: '0.75rem',
-                    },
-                    '& .MuiInputBase-root': {
-                      padding: 0,
-                      fontSize: '0.75rem',
-                    },
-                    '& .MuiSvgIcon-root': {
-                      fontSize: '18px',
-                    },
-                    '& .MuiIconButton-root': {
-                      padding: 0,
-                      marginRight: '0.5rem',
-                    },
-                  }}
-                  slotProps={{
-                    textField: {
-                      size: 'small',
-                      variant: 'outlined',
-                      InputProps: {
-                        endAdornment: field.value ? (
-                          <IconButton size="small" onClick={() => field.onChange(null)} edge="end">
-                            <Clear fontSize="small" />
-                          </IconButton>
-                        ) : null,
-                      },
-                    },
-                  }}
-                />
-              )}
+              render={({ field }) => {
+                const dueTime = useWatch({ control, name: 'dueTime' });
+                return (
+                  <DateTimePickerButton
+                    date={field.value ?? null}
+                    time={dueTime ?? null}
+                    onChange={(date, time) => {
+                      field.onChange(date);
+                      setValue('dueTime', time);
+                      if (!date) setValue('dueType', 'NONE');
+                      else if (date && time) setValue('dueType', 'DATE_TIME');
+                      else setValue('dueType', 'DATE');
+                    }}
+                  />
+                );
+              }}
             />
 
             <Controller
@@ -211,6 +175,21 @@ function TaskEditor({
                 </>
               )}
             />
+            <Button
+              size="small"
+              variant="outlined"
+              startIcon={<AccessAlarm />}
+              sx={{
+                fontWeight: 'normal',
+                padding: '1px 3px',
+                color: '#6c757d',
+                fontSize: '0.75rem',
+                borderColor: '#c4c4c4',
+              }}
+              onClick={handleReminderClick}
+            >
+              Reminders
+            </Button>
           </Stack>
 
           <Divider />

@@ -1,18 +1,21 @@
 import type { ICategory } from './category';
 import type { PriorityLevel } from './enum';
 
+type DueType = 'NONE' | 'DATE' | 'DATE_TIME';
 export interface ITask {
   id: string;
   title: string;
   description?: string;
+  dueType: DueType;
   dueDate: string;
+  dueDateTime: string;
   priority: PriorityLevel;
   isCompleted: boolean;
   completedAt?: string | null;
   category?: ICategory | null;
-  isInboxTask: boolean;
-  isTodayTask: boolean;
-  isOverdue: boolean;
+  inboxTask: boolean;
+  todayTask: boolean;
+  overdue: boolean;
 }
 
 export interface GetTasksParams {
@@ -21,11 +24,12 @@ export interface GetTasksParams {
   dueDate?: string;
   status?: string;
 }
-
 export interface TaskFormValues {
   title: string;
   description?: string;
+  dueType: DueType;
   dueDate?: Date | null;
+  dueTime: string | null;
   priority: PriorityLevel;
   categoryId?: string;
 }
@@ -33,7 +37,9 @@ export interface TaskFormValues {
 export interface TaskRequest {
   title: string;
   description?: string;
-  dueDate?: string | null;
+  dueType: DueType;
+  dueDate?: string; // yyyy-MM-dd
+  dueDateTime?: string; // ISO
   priority: PriorityLevel;
   categoryId?: string;
 }

@@ -29,8 +29,9 @@ import { useDeleteTask, usePatchTask } from '@hooks/useTask';
 import { enqueueSnackbar } from 'notistack';
 import { mapTaskToForm } from 'src/utils/task';
 import ConfirmDeleteDialog from './ConfirmDeleteDialog';
-import { format, isBefore, startOfToday } from 'date-fns';
+import { format } from 'date-fns';
 import CategorySubMenu from './CategorySubMenu';
+import { formatVnTime, isTaskExpired } from 'src/utils/times';
 
 type TaskItemProps = {
   task: ITask;
@@ -47,7 +48,6 @@ function TaskItem({ task, onEdit, showDueDate, showCategory }: TaskItemProps) {
   const [openDeleteConfirm, setOpenDeleteConfirm] = useState(false);
   const { mutateAsync } = usePatchTask();
   const { mutateAsync: mutateAsyncDelete } = useDeleteTask();
-  const isOverdue = task.dueDate && isBefore(new Date(task.dueDate), startOfToday());
 
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [subAnchorEl, setSubAnchorEl] = useState<HTMLElement | null>(null);
@@ -169,20 +169,28 @@ function TaskItem({ task, onEdit, showDueDate, showCategory }: TaskItemProps) {
                   <Stack spacing={0.2}>
                     <Typography>{task.title}</Typography>
                     <Typography variant="body2">{task.description}</Typography>
-
-                    {showDueDate && task.dueDate && (
-                      <Stack
-                        direction="row"
-                        spacing={0.5}
-                        alignItems="center"
-                        sx={{ color: isOverdue ? 'error.main' : '#9C27B0' }}
-                      >
-                        <Event sx={{ fontSize: '13px' }} />
-                        <Typography variant="caption">
-                          {format(new Date(task.dueDate), 'MMM dd')}
-                        </Typography>
-                      </Stack>
-                    )}
+                    <Stack
+                      direction="row"
+                      spacing={0.5}
+                      sx={{
+                        color:
+                          task.overdue || isTaskExpired(task.dueDateTime)
+                            ? 'error.main'
+                            : '#9C27B0',
+                      }}
+                    >
+                      {showDueDate && task.dueDate && (
+                        <Stack direction="row" spacing={0.5} alignItems="center">
+                          <Event sx={{ fontSize: '13px' }} />
+                          <Typography variant="caption">
+                            {format(new Date(task.dueDate), 'MMM dd')}
+                          </Typography>
+                        </Stack>
+                      )}
+                      <Typography variant="caption">
+                        {task.dueType == 'DATE_TIME' && formatVnTime(task.dueDateTime)}
+                      </Typography>
+                    </Stack>
                   </Stack>
                   {showCategory && (
                     <Chip

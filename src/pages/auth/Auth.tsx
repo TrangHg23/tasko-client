@@ -45,11 +45,11 @@ export default function Auth() {
         );
       case 'reset':
         return (
-          <Suspense fallback={<LoadingSpinner/>}>
-            <ResetPasswordForm/>
+          <Suspense fallback={<LoadingSpinner />}>
+            <ResetPasswordForm />
           </Suspense>
-        )
-      
+        );
+
       default:
         return <LoginForm />;
     }
